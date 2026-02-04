@@ -41,6 +41,7 @@ public class UserController {
 
 package com.example.demo.controller;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import com.example.demo.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
