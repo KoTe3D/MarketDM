@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.UserUpdateDto;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class UserService {
         userRepository.delete(user);//выше хотим убедиться что объект существует
     }
 
+    /*
     public void update(Long id, String email, String name) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
@@ -68,4 +70,29 @@ public class UserService {
 
         userRepository.save(user);
     }
+//для PUT без JSON в POSTMEN
+     */
+    public void update(Long id, UserUpdateDto updateDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Обновляем только не-null поля
+        if (updateDto.getName() != null) {
+            user.setName(updateDto.getName());
+        }
+        if (updateDto.getEmail() != null) {
+            user.setEmail(updateDto.getEmail());
+        }
+        if (updateDto.getBirth() != null) {
+            user.setBirth(updateDto.getBirth());
+
+            user.setAge(calculateAge(updateDto.getBirth()));
+        }
+
+        userRepository.save(user);
+    }
+    private int calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
+
 }

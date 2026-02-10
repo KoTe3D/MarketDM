@@ -41,12 +41,13 @@ public class UserController {
 
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;// для обычной аннотации PUT с использованием Json в Postmen
 import com.example.demo.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.User;
+import com.example.demo.DTO.UserUpdateDto;
 
 
 import java.util.List;
@@ -83,12 +84,30 @@ public class UserController {
         //}
     }
 
+    /*public void update(
+            @PathVariable Long id,
+            @RequestParam(required = false) String email,// данная аннотация предполагает что мы будем передавать данные в URL
+            @RequestParam(required = false) String name// то есть если работать через Postmen нужно будет поменять или иметь этот ввиду ведь через Json данные не уйдут хоть статус и будет 200
+    ){
+        userService.update(id, email, name);
+
+    }
+*/
     @PutMapping(path = "{id}")
     public void update(
             @PathVariable Long id,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String name
+            @RequestBody UserUpdateDto updateDto  // ← Принимаем DTO
     ){
-        userService.update(id, email, name);
+        userService.update(id, updateDto);
     }
+
+/*
+    @PutMapping(path = "{id}")
+    public void update(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates  // ← Принимаем JSON!
+    ){
+        userService.update(id, updates);
+    }
+*/
 }
