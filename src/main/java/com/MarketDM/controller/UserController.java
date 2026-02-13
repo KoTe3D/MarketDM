@@ -39,19 +39,16 @@ public class UserController {
 }
 */
 
-package com.example.demo.controller;
+package com.MarketDM.controller;
 
 import org.springframework.web.bind.annotation.RequestBody;// для обычной аннотации PUT с использованием Json в Postmen
-import com.example.demo.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.MarketDM.service.UserService;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.entity.User;
-import com.example.demo.DTO.UserUpdateDto;
+import com.MarketDM.entity.User;
+import com.MarketDM.DTO.UserUpdateDto;
 
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 @RestController
 @RequestMapping(path = "api/users")

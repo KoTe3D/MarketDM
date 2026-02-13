@@ -1,8 +1,8 @@
-package com.example.demo.service;
+package com.MarketDM.service;
 
-import com.example.demo.DTO.UserUpdateDto;
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import com.MarketDM.DTO.UserUpdateDto;
+import com.MarketDM.entity.User;
+import com.MarketDM.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
