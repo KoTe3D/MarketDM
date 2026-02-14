@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input { display: block; margin-bottom: 10px; padding: 8px; width: 300px; }
+        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+        #result { margin-top: 20px; white-space: pre-wrap; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+<h2>Регистрация нового пользователя</h2>
+<form id="registerForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Пароль (мин. 6 символов)" required>
+    <input type="text" id="firstName" placeholder="Имя" required>
+    <input type="text" id="lastName" placeholder="Фамилия" required>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value
+        };
+
+        try {
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const resultDiv = document.getElementById('result');
+            if (response.ok) {
+                const user = await response.json();
+                resultDiv.innerHTML = `<div class="success">✅ Успешно! ID: ${user.id}, Email: ${user.email}</div>`;
+            } else {
+                const error = await response.text();
+                resultDiv.innerHTML = `<div class="error">❌ Ошибка: ${error}</div>`;
+            }
+        } catch (err) {
+            document.getElementById('result').innerHTML = `<div class="error">❌ Ошибка соединения</div>`;
+        }
+    });
+</script>
+</body>
+</html>

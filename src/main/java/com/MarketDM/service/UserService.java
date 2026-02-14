@@ -1,98 +1,124 @@
 package com.MarketDM.service;
 
+import com.MarketDM.DTO.UserCreateDto;
+import com.MarketDM.DTO.UserResponseDto;
 import com.MarketDM.DTO.UserUpdateDto;
 import com.MarketDM.entity.User;
+import com.MarketDM.exception.EmailAlreadyExistsException;
+import com.MarketDM.exception.ResourceNotFoundException;
 import com.MarketDM.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.Period;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    // ====== Поиск всех пользователей ======
+    public List<UserResponseDto> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-//          Данные ниже мы обычно так не прописываем а берём из бд
-//        return List.of(
-//                new User(1L, "Sergey", "ser@mail.ru", LocalDate.of(1990, 1, 1), 35),
-//                new User(2L, "Mary", "mary@mail.ru", LocalDate.of(1991, 2, 2), 34),
-//                new User(3L, "Ivan", "ivan@mail.ru", LocalDate.of(1992, 3, 3), 33)
-//        );
+    // ====== Поиск пользователя по ID ======
+    public UserResponseDto findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        return UserResponseDto.fromEntity(user);
     }
 
-    public User create(User user) {// Мы хотим не просто сохранить нашего юзера, но и проверить что он ещё не существует в бз
-        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());// мы создадим свой собстенный метод в UserRepository так как существующий findBy слишком сложный
-        if (optionalUser.isPresent()) {
-            throw new IllegalStateException("Юзер с таким никнеймом уже существует");
+    // ====== Поиск пользователя по email ======
+    public UserResponseDto findByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return UserResponseDto.fromEntity(user);
+    }
+
+    // ====== Все пользователи с пагинацией ======
+    public Page<UserResponseDto> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(UserResponseDto::fromEntity);
+    }
+
+    // ====== Создание нового пользователя (обычная регистрация) ======
+    @Transactional
+    public UserResponseDto create(UserCreateDto createDto) {
+        // Проверяем, не занят ли email
+        if (userRepository.existsByEmail(createDto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already in use");
         }
-        user.setAge(Period.between(user.getBirth(), LocalDate.now()).getYears()); //В библеотеке Javatime есть такой статичный класс период
-        //вернули разницу между датой рождения и текущей датой и достали из неё год
-        return userRepository.save(user);
+
+        User user = User.builder()
+                .email(createDto.getEmail())
+                .password(passwordEncoder.encode(createDto.getPassword())) // кодируем пароль
+                .firstName(createDto.getFirstName())
+                .lastName(createDto.getLastName())
+                .provider("local") // обычная регистрация
+                .enabled(true)
+                .build();
+
+        user = userRepository.save(user);
+        return UserResponseDto.fromEntity(user);
     }
 
+    // ====== Обновление пользователя (частичное) ======
+    @Transactional
+    public UserResponseDto update(Long id, UserUpdateDto dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        // Обновляем только переданные поля (не null)
+        if (dto.getEmail() != null) {
+            // Проверяем, что email не занят другим пользователем
+            if (!dto.getEmail().equals(user.getEmail()) &&
+                    userRepository.existsByEmail(dto.getEmail())) {
+                throw new EmailAlreadyExistsException("Email already in use");
+            }
+            user.setEmail(dto.getEmail());
+        }
+
+        if (dto.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        if (dto.getFirstName() != null) {
+            user.setFirstName(dto.getFirstName());
+        }
+
+        if (dto.getLastName() != null) {
+            user.setLastName(dto.getLastName());
+        }
+
+        if (dto.getAvatarUrl() != null) {
+            user.setAvatarUrl(dto.getAvatarUrl());
+        }
+
+        if (dto.getEnabled() != null) {
+            // Здесь можно добавить проверку прав (только админ)
+            user.setEnabled(dto.getEnabled());
+        }
+
+        return UserResponseDto.fromEntity(user);
+    }
+
+    // ====== Удаление пользователя ======
     @Transactional
     public void delete(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Юзер с id " + id + " не существует"));
-
-        userRepository.delete(user);//выше хотим убедиться что объект существует
-    }
-
-    /*
-    public void update(Long id, String email, String name) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) {
-            throw new IllegalStateException("Юзер с id " + id + " не существует");
-    }
-    User user = optionalUser.get();
-
-    if (email != null && !email.equals(user.getEmail())){
-        Optional<User> foundByEmail = userRepository.findByEmail(email);// мы создадим свой собстенный метод в UserRepository так как существующий findBy слишком сложный
-        if (foundByEmail.isPresent()) {
-            throw new IllegalStateException("Юзер с таким никнеймом уже существует");
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
         }
-        user.setEmail(email);
+        userRepository.deleteById(id);
     }
-
-    if (name != null && !name.equals(user.getName())){
-        user.setName(name);
-    }
-
-        userRepository.save(user);
-    }
-//для PUT без JSON в POSTMEN
-     */
-    public void update(Long id, UserUpdateDto updateDto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Обновляем только не-null поля
-        if (updateDto.getName() != null) {
-            user.setName(updateDto.getName());
-        }
-        if (updateDto.getEmail() != null) {
-            user.setEmail(updateDto.getEmail());
-        }
-        if (updateDto.getBirth() != null) {
-            user.setBirth(updateDto.getBirth());
-
-            user.setAge(calculateAge(updateDto.getBirth()));
-        }
-
-        userRepository.save(user);
-    }
-    private int calculateAge(LocalDate birthDate) {
-        return Period.between(birthDate, LocalDate.now()).getYears();
-    }
-
 }

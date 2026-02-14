@@ -1,110 +1,79 @@
-/*package com.example.demo.controller;
-
-import com.example.demo.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.example.demo.entity.User;
-
-import java.util.List;
-//Вся бизнес-логика не должна храниться в контроллере, по SOLID-принципам каждый класс должен отвечать единичной ответственности, он не должен выполнять
-//какую-либо логику, в данном случае билдить юзеров, контроллер на продакшен-коде чаще всего выполняет только одну единственную функцию — это обработка входящих
-//запросов, дальше он с ними ничего не делает и делегирует всю логику выполнения слою сервисов, и дальше сервис уже
-// с ними работает.
-@RestController
-@RequestMapping(path = "api/users")
-public class UserController {
-
-    private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping
-    public List<User> findAll() {
-        return userService.findAll();
-    }
-
-    @PostMapping
-    public User create(@RequestBody User user) {
-        return userService.create(user);
-    }
-
-    @DeleteMapping(path = "{id}")// здесь будет путь аргумент Long id нужно пометить аннотацией @PathVariable и можно указать name = если имя отличается в нашем случае нет
-    public void delete(@PathVariable (name = "id") Long id){// будем передавать объект не в теле метода не в качестве параметров url у нас переменная пути
-        userService.delete(id);
-    }
-
-}
-*/
-
 package com.MarketDM.controller;
 
-import org.springframework.web.bind.annotation.RequestBody;// для обычной аннотации PUT с использованием Json в Postmen
-import com.MarketDM.service.UserService;
-import org.springframework.web.bind.annotation.*;
-import com.MarketDM.entity.User;
+import com.MarketDM.DTO.UserCreateDto;
+import com.MarketDM.DTO.UserResponseDto;
 import com.MarketDM.DTO.UserUpdateDto;
-
+import com.MarketDM.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/users")
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
+    // ====== 1. Получить всех пользователей (с пагинацией и сортировкой) ======
     @GetMapping
-    public List<User> findAll() {
-        return userService.findAll();
+    @PreAuthorize("hasRole('ADMIN')") // только админ может видеть всех
+    public ResponseEntity<Page<UserResponseDto>> findAll(
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(userService.findAll(pageable));
     }
 
+    // ====== 2. Получить одного пользователя по ID ======
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
+    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+    // ====== 3. Создать нового пользователя (обычная регистрация) ======
     @PostMapping
-    public User create(@RequestBody User user) {
-        return userService.create(user);
+    public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserCreateDto createDto) {
+        UserResponseDto created = userService.create(createDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @DeleteMapping(path = "{id}")
-    public void delete(@PathVariable Long id) {
-        //try {
-            userService.delete(id);
-            //return ResponseEntity.ok("Пользователь с ID " + id + " успешно удален");
-        //} catch (Exception e) {
-            //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            //        .body("Ошибка: " + e.getMessage());
-        //}
-    }
-
-    /*public void update(
+    // ====== 4. Обновить пользователя (частичное обновление) ======
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
+    public ResponseEntity<UserResponseDto> update(
             @PathVariable Long id,
-            @RequestParam(required = false) String email,// данная аннотация предполагает что мы будем передавать данные в URL
-            @RequestParam(required = false) String name// то есть если работать через Postmen нужно будет поменять или иметь этот ввиду ведь через Json данные не уйдут хоть статус и будет 200
-    ){
-        userService.update(id, email, name);
-
-    }
-*/
-    @PutMapping(path = "{id}")
-    public void update(
-            @PathVariable Long id,
-            @RequestBody UserUpdateDto updateDto  // ← Принимаем DTO
-    ){
-        userService.update(id, updateDto);
+            @Valid @RequestBody UserUpdateDto updateDto
+    ) {
+        UserResponseDto updated = userService.update(id, updateDto);
+        return ResponseEntity.ok(updated);
     }
 
-/*
-    @PutMapping(path = "{id}")
-    public void update(
-            @PathVariable Long id,
-            @RequestBody Map<String, Object> updates  // ← Принимаем JSON!
-    ){
-        userService.update(id, updates);
+    // ====== 5. Удалить пользователя ======
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
-*/
+
+    // ====== 6. Получить текущего пользователя (по JWT) ======
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserResponseDto> getCurrentUser(
+            @org.springframework.security.core.annotation.AuthenticationPrincipal
+            org.springframework.security.core.userdetails.UserDetails currentUser
+    ) {
+        // Предполагаем, что email = username
+        return ResponseEntity.ok(userService.findByEmail(currentUser.getUsername()));
+    }
 }

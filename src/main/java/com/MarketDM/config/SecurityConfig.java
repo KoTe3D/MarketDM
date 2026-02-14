@@ -33,14 +33,14 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     /**
-     * 1️⃣ API для мобильных приложений и SPA (React/Vue) – STATELESS, JWT
+     * API для мобильных приложений и SPA (React/Vue) – STATELESS, JWT
      */
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/api/**", "/mobile/**")
-                .authenticationProvider(authenticationProvider())//хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
+                .authenticationProvider(authenticationProvider())//Хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(ex -> ex
@@ -82,14 +82,14 @@ public class SecurityConfig {
 
 
     /**
-     * 2️⃣ Административная панель – традиционный веб-интерфейс с сессиями
+     * Административная панель – традиционный веб-интерфейс с сессиями
      */
     @Bean
     @Order(2)
     public SecurityFilterChain adminWebSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/admin/**", "/webjars/**", "/css/**", "/js/**")
-                .authenticationProvider(authenticationProvider())//хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
+                .authenticationProvider(authenticationProvider())//Хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/login", "/admin/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")

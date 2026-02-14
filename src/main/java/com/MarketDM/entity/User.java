@@ -18,7 +18,7 @@ import java.util.Set;
 @Builder
 @ToString(exclude = "password") // не выводим пароль
 @EqualsAndHashCode(of = "id")   // только по id
-public class UserOAuth2 {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +27,7 @@ public class UserOAuth2 {
     private String email;
 
     @Column(length = 64)
-    private String password;  // может быть null для OAuth2
+    private String password;  // может быть null для User
 
     private String firstName;
     private String lastName;
