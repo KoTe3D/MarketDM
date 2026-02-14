@@ -33,6 +33,7 @@ public class User {
     private String lastName;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean enabled = true;
 
     @Column(name = "created_at", updatable = false)
@@ -43,6 +44,7 @@ public class User {
 
     // --- OAuth2 ---
     @Column(nullable = false)
+    @Builder.Default
     private String provider = "local";
 
     @Column(name = "provider_id")
@@ -52,6 +54,7 @@ public class User {
     private String avatarUrl;
 
     @Column(name = "email_verified", nullable = false)
+    @Builder.Default
     private boolean emailVerified = false;
 
     // --- Password reset ---
@@ -77,5 +80,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 }
