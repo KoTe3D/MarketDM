@@ -4,8 +4,10 @@ import com.MarketDM.DTO.UserCreateDto;
 import com.MarketDM.DTO.UserResponseDto;
 import com.MarketDM.DTO.UserUpdateDto;
 import com.MarketDM.entity.User;
+import com.MarketDM.entity.Role;
 import com.MarketDM.exception.EmailAlreadyExistsException;
 import com.MarketDM.exception.ResourceNotFoundException;
+import com.MarketDM.repository.RoleRepository;
 import com.MarketDM.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +26,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     // ====== Поиск всех пользователей ======
     public List<UserResponseDto> findAll() {
@@ -60,12 +64,16 @@ public class UserService {
             throw new EmailAlreadyExistsException("Email already in use");
         }
 
+        Role customerRole = roleRepository.findByName("ROLE_CUSTOMER")
+                .orElseThrow(() -> new RuntimeException("Default role ROLE_CUSTOMER not found"));
+
         User user = User.builder()
                 .email(createDto.getEmail())
                 .password(passwordEncoder.encode(createDto.getPassword())) // кодируем пароль
                 .firstName(createDto.getFirstName())
                 .lastName(createDto.getLastName())
                 .provider("local") // обычная регистрация
+                .roles(Set.of(customerRole))
                 .enabled(true)
                 .build();
 

@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
 @Builder
 public class UserResponseDto {
-    private Long id;
+    private UUID id;
     private String email;
     private String firstName;
     private String lastName;
