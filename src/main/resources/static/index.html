@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>MarketDM - Главная</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; }
+        .header { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1rem 2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .catalog-btn { background: #4CAF50; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 4px; font-size: 1rem; cursor: pointer; font-weight: bold; }
+        .catalog-btn:hover { background: #45a049; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: #4CAF50; cursor: pointer; }
+        .search-container { display: flex; flex: 1; max-width: 400px; }
+        .search-container input { flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px 0 0 4px; outline: none; }
+        .search-container button { padding: 0.5rem 1rem; background: #4CAF50; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; }
+        .search-container button:hover { background: #45a049; }
+        .user-info { margin-left: auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .user-info a { text-decoration: none; color: #4CAF50; }
+        .user-info a:hover { text-decoration: underline; }
+        .logout-btn { background: none; border: 1px solid #ccc; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+        .logout-btn:hover { background: #f0f0f0; }
+        .admin-badge { background: gold; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; font-size: 0.9rem; margin-left: 0.5rem; }
+
+        .main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .products-area { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: #777; }
+        .footer { text-align: center; padding: 1rem; color: #777; font-size: 0.9rem; border-top: 1px solid #ddd; margin-top: 2rem; }
+
+        /* Модальное окно */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; border-radius: 8px; width: 90%; max-width: 600px; padding: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; gap: 1.5rem; }
+        .categories-panel { flex: 1; }
+        .subcategories-panel { flex: 1; background: #f9f9f9; border-radius: 8px; padding: 1rem; display: none; }
+        .subcategories-panel.visible { display: block; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 2px solid #4CAF50; padding-bottom: 0.5rem; }
+        .modal-header h3 { font-size: 1.3rem; color: #333; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #aaa; }
+        .close-btn:hover { color: #333; }
+        .category-list { list-style: none; }
+        .category-item { padding: 0.8rem 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 0.5rem; border-radius: 4px; }
+        .category-item:hover { background: #f0f0f0; }
+        .category-item.active { background: #e0e0e0; font-weight: bold; }
+        .subcategory-list { list-style: none; }
+        .subcategory-item { padding: 0.5rem; border-bottom: 1px solid #eee; cursor: pointer; }
+        .subcategory-item:last-child { border-bottom: none; }
+        .subcategory-item:hover { background: #e8f5e9; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <button class="catalog-btn" id="catalogBtn">Каталог</button>
+    <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Поиск товаров...">
+        <button id="searchBtn">Найти</button>
+    </div>
+    <div class="user-info" id="userInfo"></div>
+</header>
+
+<div class="modal" id="categoryModal">
+    <div class="modal-content">
+        <div class="categories-panel">
+            <div class="modal-header">
+                <h3>Категории</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <ul class="category-list" id="categoryList"></ul>
+        </div>
+        <div class="subcategories-panel" id="subcategoriesPanel">
+            <h4>Популярные подкатегории</h4>
+            <ul class="subcategory-list" id="subcategoryList"></ul>
+        </div>
+    </div>
+</div>
+
+<main class="main">
+    <div class="products-area" id="productsArea">
+        <p>Выберите категорию в каталоге или воспользуйтесь поиском</p>
+    </div>
+</main>
+
+<footer class="footer">
+    &copy; 2026 MarketDM. Все права защищены.
+</footer>
+
+<script>
+    // Данные категорий и подкатегорий
+    const subcategoriesData = {
+        electronics: ['Смартфоны', 'Ноутбуки', 'Наушники', 'Умные часы', 'Планшеты'],
+        home: ['Пылесосы', 'Кухонная техника', 'Текстиль', 'Освещение', 'Мебель'],
+        clothing: ['Мужская одежда', 'Женская одежда', 'Детская одежда', 'Обувь', 'Аксессуары'],
+        sports: ['Тренажёры', 'Спортивная одежда', 'Мячи', 'Велоспорт', 'Туризм'],
+        kids: ['Игрушки', 'Коляски', 'Детская мебель', 'Подгузники', 'Развивающие игры']
+    };
+    const categories = [
+        { id: 'electronics', name: 'Электроника', icon: '📱' },
+        { id: 'home', name: 'Товары для дома', icon: '🏠' },
+        { id: 'clothing', name: 'Одежда', icon: '👕' },
+        { id: 'sports', name: 'Спорттовары', icon: '⚽' },
+        { id: 'kids', name: 'Детские товары', icon: '🧸' }
+    ];
+
+    // DOM элементы
+    const catalogBtn = document.getElementById('catalogBtn');
+    const modal = document.getElementById('categoryModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const categoryList = document.getElementById('categoryList');
+    const subcategoriesPanel = document.getElementById('subcategoriesPanel');
+    const subcategoryList = document.getElementById('subcategoryList');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    // Поиск
+    function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+            window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+        }
+    }
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+
+    // Управление модальным окном
+    function openModal() {
+        modal.classList.add('show');
+        setActiveCategory('electronics');
+        showSubcategories('electronics');
+    }
+    function closeModal() { modal.classList.remove('show'); }
+    catalogBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // Показать подкатегории
+    function showSubcategories(categoryId) {
+        const subs = subcategoriesData[categoryId] || [];
+        subcategoryList.innerHTML = '';
+        subs.forEach(sub => {
+            const li = document.createElement('li');
+            li.className = 'subcategory-item';
+            li.textContent = sub;
+            li.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeModal();
+                window.location.href = `/subcategory.html?cat=${categoryId}&sub=${encodeURIComponent(sub)}`;
+            });
+            subcategoryList.appendChild(li);
+        });
+        subcategoriesPanel.classList.add('visible');
+    }
+
+    function setActiveCategory(categoryId) {
+        document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+        const activeEl = document.querySelector(`.category-item[data-id="${categoryId}"]`);
+        if (activeEl) activeEl.classList.add('active');
+    }
+
+    function renderCategoryMenu() {
+        categoryList.innerHTML = '';
+        categories.forEach(cat => {
+            const li = document.createElement('li');
+            li.className = 'category-item';
+            li.dataset.id = cat.id;
+            li.innerHTML = `${cat.icon} ${cat.name}`;
+            li.addEventListener('mouseenter', () => showSubcategories(cat.id));
+            li.addEventListener('click', () => {
+                closeModal();
+                window.location.href = `/category.html?id=${cat.id}`;
+            });
+            categoryList.appendChild(li);
+        });
+    }
+
+    // Загрузка профиля
+    async function loadUserInfo() {
+        const token = localStorage.getItem('jwt');
+        const userInfoDiv = document.getElementById('userInfo');
+        if (!token) {
+            userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+            return;
+        }
+        try {
+            const response = await fetch('/api/users/profile', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (response.ok) {
+                const user = await response.json();
+                const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
+                let html = `<span>${user.email}</span>`;
+                if (isAdmin) html += `<span class="admin-badge">Админ</span> <a href="/admin.html">Управление</a>`;
+                html += ` <a href="/cart.html">Корзина</a> <button class="logout-btn" id="logoutBtn">Выйти</button>`;
+                userInfoDiv.innerHTML = html;
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    localStorage.removeItem('jwt');
+                    window.location.reload();
+                });
+            } else {
+                localStorage.removeItem('jwt');
+                userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+            }
+        } catch (err) {
+            console.error('Ошибка загрузки профиля', err);
+            userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+        }
+    }
+
+    window.addEventListener('load', () => {
+        loadUserInfo();
+        renderCategoryMenu();
+    });
+</script>
+</body>
+</html>

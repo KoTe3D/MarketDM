@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск - MarketDM</title>
+    <style> /* аналогично главной */ </style>
+</head>
+<body>
+<header>...</header>
+<main>
+    <h2>Результаты поиска: <span id="searchQuery"></span></h2>
+    <div class="product-grid" id="searchResults"></div>
+</main>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q');
+    document.getElementById('searchQuery').textContent = query;
+    // Здесь можно сделать fetch к API /api/v1/products/search?q=...
+</script>
+</body>
+</html>

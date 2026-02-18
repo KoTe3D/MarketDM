@@ -59,7 +59,7 @@
                 // Сохраняем токен в localStorage (можно использовать для авторизованных запросов)
                 localStorage.setItem('jwt', token);
                 // Опционально: перенаправить на главную через пару секунд
-                // setTimeout(() => { window.location.href = '/'; }, 2000);
+                window.location.href = '/';
             } else {
                 let errorText = `❌ Ошибка ${response.status}`;
                 try {
