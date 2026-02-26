@@ -5,15 +5,89 @@
     <title>MarketDM - Главная</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; }
-        .header { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-        .catalog-btn { background: #4CAF50; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 4px; font-size: 1rem; cursor: pointer; font-weight: bold; }
-        .catalog-btn:hover { background: #45a049; }
-        .logo { font-size: 1.8rem; font-weight: bold; color: #4CAF50; cursor: pointer; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Световой градиент на всю страницу */
+            background: linear-gradient(to right, #010a18, #3e0d03);
+            color: #333;
+        }
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to right, #010a18, #3e0d03); /* запасной цвет */
+            padding: 3.5rem 2rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            color: #ffc638;
+            min-height: 120px;
+            border-bottom: 3px solid #ffb6c1;
+        }
+
+        /* Фоновое видео */
+        .header-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top; /* выравнивание по верхнему краю */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Затемнение (опционально) */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Все прямые потомки header (кроме видео) поверх затемнения */
+        .header > *:not(.header-video) {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Левая группа элементов (кнопка, лого, адрес, поиск) */
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;       /* отступы между элементами */
+            margin-left: 200px;  /* сдвиг вправо (нужное значение) */
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .catalog-btn {
+            background: #039dbf;
+            color: #023e82;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .catalog-btn:hover { background: #03819c; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #039dbf;
+            cursor: pointer;
+        }
         .address-picker {
             display: flex;
             align-items: center;
-            background: #f0f0f0;
+            background: #039dbf;
+            color: #023e82;
             padding: 0.5rem 1rem;
             border-radius: 20px;
             cursor: pointer;
@@ -25,18 +99,19 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .address-picker:hover { background: #e0e0e0; }
+        .address-picker:hover { background: #03819c; }
         .search-box {
             display: flex;
             align-items: center;
-            background: #f0f0f0;
+            background: #b34804;
             border-radius: 20px;
             padding: 0.3rem 1rem;
-            flex: 2;
+            flex: 3;
             max-width: 500px;
         }
         .search-box input {
             border: none;
+            color: #ffc638;
             background: transparent;
             padding: 0.5rem;
             width: 100%;
@@ -48,16 +123,48 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
-            color: #777;
+            color: #039cbe;
         }
         .search-box button:hover { color: #4CAF50; }
-        .user-info { display: flex; gap: 1rem; align-items: center; margin-left: auto; }
-        .user-info a { text-decoration: none; color: #4CAF50; display: flex; align-items: center; gap: 0.3rem; }
-        .icon-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #333; }
+        .user-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-left: auto;  /* прижимает блок к правому краю */
+        }
+        .user-info a {
+            text-decoration: none;
+            color: #b34804;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
         .icon-btn:hover { color: #4CAF50; }
-        .admin-badge { background: gold; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; font-size: 0.8rem; margin-left: 0.3rem; }
-        .logout-btn { background: none; border: 1px solid #ccc; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; }
-        .logout-btn:hover { background: #f0f0f0; }
+        .admin-badge {
+            background: gold;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-left: 0.3rem;
+        }
+        .logout-btn {
+            background: none;
+            color: #ffc638;
+            border: 1px solid #b34804;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .logout-btn:hover { background: #b34804; }
 
         .main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
         .products-area {
@@ -73,9 +180,16 @@
             text-align: center;
             color: #777;
         }
-        .footer { text-align: center; padding: 1rem; color: #777; font-size: 0.9rem; border-top: 1px solid #ddd; margin-top: 2rem; }
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 3px solid #ffb6c1;
+            margin-top: 2rem;
+        }
 
-        /* Модальные окна */
+        /* Модальные окна (без изменений) */
         .modal {
             display: none;
             position: fixed;
@@ -110,7 +224,6 @@
         .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #aaa; }
         .close-btn:hover { color: #333; }
 
-        /* Две колонки для выбора способа */
         .address-choice {
             display: flex;
             gap: 2rem;
@@ -137,14 +250,8 @@
             margin-bottom: 0.5rem;
             color: #4CAF50;
         }
-
-        /* Панели внутри модального окна */
-        .delivery-panel {
-            margin-top: 1rem;
-        }
-        .hidden {
-            display: none;
-        }
+        .delivery-panel { margin-top: 1rem; }
+        .hidden { display: none; }
         .find-on-map-btn {
             background: #4CAF50;
             color: white;
@@ -157,8 +264,6 @@
             margin-top: 1rem;
         }
         .find-on-map-btn:hover { background: #45a049; }
-
-        /* Детали доставки */
         .delivery-details {
             margin-top: 1rem;
             padding: 1rem;
@@ -172,9 +277,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .delivery-details label {
-            font-weight: bold;
-        }
+        .delivery-details label { font-weight: bold; }
         .continue-btn {
             background: #4CAF50;
             color: white;
@@ -185,11 +288,7 @@
             width: 100%;
         }
         .continue-btn:hover { background: #45a049; }
-
-        /* Карта в отдельном модальном окне */
-        .map-modal .modal-content {
-            max-width: 800px;
-        }
+        .map-modal .modal-content { max-width: 800px; }
         #mapContainer {
             width: 100%;
             height: 400px;
@@ -217,15 +316,11 @@
             background: #ccc;
             cursor: not-allowed;
         }
-
-        /* ПВЗ */
         .pvz-layout {
             display: flex;
             gap: 1.5rem;
         }
-        .pvz-map {
-            flex: 2;
-        }
+        .pvz-map { flex: 2; }
         .pvz-list {
             flex: 1;
             max-height: 400px;
@@ -244,25 +339,47 @@
             width: 100%;
             height: 400px;
         }
+        .cart-icon {
+            width: 68px;        /* ширина иконки */
+            height: 68px;       /* высота иконки */
+            vertical-align: middle; /* выравнивание по центру строки */
+        }
+        .profile-icon1 {
+            width: 50px;        /* ширина иконки */
+            height: 50px;       /* высота иконки */
+            vertical-align: middle; /* выравнивание по центру строки */
+        }
     </style>
-    <!-- Яндекс Карты с API-ключом (замените на свой) -->
+    <!-- Яндекс Карты (ключ тот же) -->
     <script src="https://api-maps.yandex.ru/2.1/?apikey=e2d67bac-2021-46f8-bb1a-930bf3105bd1&lang=ru_RU" type="text/javascript"></script>
 </head>
-<body>-
+<body>
 <header class="header">
-    <button class="catalog-btn" id="catalogBtn">Каталог</button>
-    <div class="logo" onclick="window.location.href='/'">MarketDM</div>
-    <div class="address-picker" id="addressPicker">
-        <span id="currentAddress">Адрес доставки</span>
+    <!-- Фоновое видео -->
+    <video class="header-video" autoplay muted loop playsinline>
+        <source src="/video/tvsd2header.mp4" type="video/mp4">
+        <source src="/video/tvsd2header.webm" type="video/webm">
+        Ваш браузер не поддерживает видео.
+    </video>
+
+    <!-- Левая группа: элементы, которые нужно сдвинуть вправо -->
+    <div class="header-left-group">
+        <button class="catalog-btn" id="catalogBtn">Каталог</button>
+        <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+        <div class="address-picker" id="addressPicker">
+            <span id="currentAddress">Адрес доставки</span>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
+            <button id="searchBtn">⚡</button>
+        </div>
     </div>
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Поиск товаров...">
-        <button id="searchBtn">🔍</button>
-    </div>
+
+    <!-- Правая группа: профиль и корзина -->
     <div class="user-info" id="userInfo"></div>
 </header>
 
-<!-- Модальное окно каталога (оставляем как было) -->
+<!-- Модальные окна (без изменений) -->
 <div class="modal" id="categoryModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -281,7 +398,6 @@
     </div>
 </div>
 
-<!-- Основное модальное окно выбора способа получения -->
 <div class="modal" id="addressChoiceModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -298,7 +414,6 @@
                 <p>Заберите заказ в удобном пункте</p>
             </div>
         </div>
-        <!-- Динамические панели -->
         <div id="courierPanel" class="delivery-panel hidden">
             <button class="find-on-map-btn" id="openMapModalBtn">Найти на карте</button>
             <div id="courierDetails" class="delivery-details hidden">
@@ -324,7 +439,6 @@
     </div>
 </div>
 
-<!-- Модальное окно с картой для выбора адреса курьером -->
 <div class="modal map-modal" id="mapModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -389,12 +503,11 @@
     let selectedAddress = '';
 
     // Состояние выбора
-    let currentChoice = 'courier'; // 'courier' или 'pickup'
+    let currentChoice = 'courier';
 
     // ---------- Открытие основного модального окна ----------
     function openChoiceModal() {
         addressChoiceModal.classList.add('show');
-        // Сбрасываем выбор на курьера
         setActiveChoice('courier');
     }
     function closeChoiceModalFn() {
@@ -412,13 +525,11 @@
             pickupChoice.classList.remove('selected');
             courierPanel.classList.remove('hidden');
             pickupPanel.classList.add('hidden');
-            // Если карта ПВЗ была инициализирована, можно её скрыть/удалить? Не обязательно.
         } else {
             pickupChoice.classList.add('selected');
             courierChoice.classList.remove('selected');
             pickupPanel.classList.remove('hidden');
             courierPanel.classList.add('hidden');
-            // Инициализация карты ПВЗ при первом открытии
             if (!pickupMap) {
                 initPickupMap();
             } else {
@@ -444,7 +555,6 @@
         mapModal.classList.remove('show');
     });
 
-    // Инициализация карты в отдельном окне
     function initMap() {
         if (!window.ymaps) { console.error('❌ Яндекс.Карты не загружены'); return; }
         ymaps.ready(() => {
@@ -453,7 +563,6 @@
                 zoom: 10
             });
 
-            // Клик на карте
             map.events.add('click', (e) => {
                 const coords = e.get('coords');
                 if (placemark) map.geoObjects.remove(placemark);
@@ -461,7 +570,6 @@
                 map.geoObjects.add(placemark);
                 selectedCoords = coords;
 
-                // Обратное геокодирование
                 ymaps.geocode(coords).then(res => {
                     const firstGeoObject = res.geoObjects.get(0);
                     if (firstGeoObject) {
@@ -472,7 +580,6 @@
                 });
             });
 
-            // Подсказки при вводе
             const suggestView = new ymaps.SuggestView('searchInputMap');
             suggestView.events.add('select', (e) => {
                 const address = e.get('item').value;
@@ -486,13 +593,12 @@
                         placemark = new ymaps.Placemark(coords, {}, { preset: 'islands#redDotIcon' });
                         map.geoObjects.add(placemark);
                         map.setCenter(coords, 15);
-                        selectedAddress = address;
+                        selectedAddress = firstGeoObject.getAddressLine();
                         selectAddressBtn.disabled = false;
                     }
                 });
             });
 
-            // Обработка нажатия Enter в поле ввода
             searchInputMap.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -521,19 +627,12 @@
         });
     }
 
-    // Подтверждение выбора адреса на карте
     selectAddressBtn.addEventListener('click', () => {
         if (!selectedAddress) return;
-        // Закрываем карту
         mapModal.classList.remove('show');
-        // Показываем детали в панели курьера
         courierDetails.classList.remove('hidden');
-        // Сохраняем выбранный адрес (без деталей) в переменную, но не в шапку
-        // Позже, после нажатия "Продолжить", сохраним в шапку только адрес (без деталей)
-        // Детали пока не сохраняем
     });
 
-    // Кнопка "Продолжить" для курьера
     continueBtn.addEventListener('click', () => {
         const flat = flatInput.value.trim();
         const entrance = entranceInput.value.trim();
@@ -549,15 +648,12 @@
             return;
         }
 
-        // В шапку сохраняем только адрес (без деталей)
         currentAddressSpan.textContent = selectedAddress;
         localStorage.setItem('deliveryAddress', selectedAddress);
 
-        // Детали сохраняем отдельно
         const details = { flat, entrance, floor, phone };
         localStorage.setItem('deliveryDetails', JSON.stringify(details));
 
-        // Закрываем основное модальное окно
         closeChoiceModalFn();
     });
 
@@ -598,7 +694,7 @@
     function selectPickupPoint(point) {
         currentAddressSpan.textContent = point.address;
         localStorage.setItem('deliveryAddress', point.address);
-        localStorage.removeItem('deliveryDetails'); // для ПВЗ детали не нужны
+        localStorage.removeItem('deliveryDetails');
         closeChoiceModalFn();
     }
 
@@ -619,7 +715,7 @@
         if (e.key === 'Enter') document.getElementById('searchBtn').click();
     });
 
-    // ---------- Каталог (упрощённо, для полноты) ----------
+    // ---------- Каталог (упрощённо) ----------
     const subcategoriesData = {
         electronics: ['Смартфоны', 'Ноутбуки', 'Наушники', 'Умные часы', 'Планшеты'],
         home: ['Пылесосы', 'Кухонная техника', 'Текстиль', 'Освещение', 'Мебель'],
@@ -706,7 +802,7 @@
             if (response.ok) {
                 const user = await response.json();
                 const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
-                let userHtml = `<a href="/cart.html" class="icon-btn" title="Корзина">🛒</a><a href="/profile.html" class="icon-btn" title="Профиль">👤</a>`;
+                let userHtml = `<a href="/cart.html" class="icon-btn" title="Корзина"><img src="/images/cart-icon.png" alt="Корзина" class="cart-icon"></a><a href="/profile.html" class="icon-btn" title="Профиль"><img src="/images/profile-icon1.png" alt="Профиль" class="profile-icon1"></a>`;
                 if (isAdmin) userHtml += '<span class="admin-badge">Админ</span>';
                 userHtml += '<button class="logout-btn" id="logoutBtn">Выйти</button>';
                 userInfoDiv.innerHTML = userHtml;
@@ -728,7 +824,6 @@
     window.addEventListener('load', () => {
         loadUserInfo();
         renderCategoryMenu();
-        // Предзагружаем ПВЗ карту при необходимости (но не сейчас)
     });
 </script>
 </body>
