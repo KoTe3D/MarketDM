@@ -6,16 +6,34 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 700;
             /* Световой градиент на всю страницу */
-            background: linear-gradient(to right, #010a18, #3e0d03);
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            );
             color: #333;
         }
         .header {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(to right, #010a18, #3e0d03); /* запасной цвет */
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            ); /* запасной цвет */
             padding: 3.5rem 2rem;
+            height: 164px;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
@@ -36,20 +54,6 @@
             z-index: 0;
             pointer-events: none;
         }
-
-        /* Затемнение (опционально) */
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 1;
-            pointer-events: none;
-        }
-
         /* Все прямые потомки header (кроме видео) поверх затемнения */
         .header > *:not(.header-video) {
             position: relative;
@@ -63,108 +67,147 @@
             gap: 1.5rem;       /* отступы между элементами */
             margin-left: 200px;  /* сдвиг вправо (нужное значение) */
             flex-wrap: wrap;
+            margin-top: -22px;
             flex: 1;
         }
 
         .catalog-btn {
-            background: #039dbf;
-            color: #023e82;
+            background: #00cdfd;
+            color: #002951;
             border: none;
             padding: 0.5rem 1.5rem;
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
             font-weight: bold;
+            position: relative;
+            z-index: 20;
         }
-        .catalog-btn:hover { background: #03819c; }
+        .catalog-btn:hover { background: #0fa8cc; }
         .logo {
             font-size: 1.8rem;
-            font-weight: bold;
-            color: #039dbf;
+            color: #00cdfd;
             cursor: pointer;
+            margin-top: -115px;
+            margin-left: -153px;  /* добавить отступ слева */
+            margin-right: 10px; /* добавить отступ справа */
         }
         .address-picker {
             display: flex;
+            font-size: 12px;           /*длина текста*/
             align-items: center;
-            background: #039dbf;
-            color: #023e82;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            gap: 8px;
             cursor: pointer;
             white-space: nowrap;
-            flex: 1 1 300px;
+            flex: 0 1 auto;
             max-width: 400px;
+            color: #0dc0e8;           /* обычный цвет текста */
+            font-weight: 500;
+            background: none;
+            padding: 4px 8px;          /* добавляем немного внутренних отступов, чтобы фон был красивым */
+            border-radius: 20px;       /* мягкое скругление для фона */
+            transition: all 0.2s ease; /* плавность всех изменений */
         }
-        .address-picker span {
-            overflow: hidden;
-            text-overflow: ellipsis;
+
+        /* Эффект при наведении */
+        .address-picker:hover {
+            background: rgba(0, 205, 253, 0.1);  /* полупрозрачный жёлтый фон */
+            color: #11c3f4;                         /* текст становится синим */
+            transform: scale(1.02);                  /* лёгкое увеличение (по желанию) */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* небольшая тень (по желанию) */
         }
-        .address-picker:hover { background: #03819c; }
+
         .search-box {
             display: flex;
             align-items: center;
-            background: #b34804;
+            background: rgba(204, 87, 11, 0);
+            border: 1px solid #d3a42f;
             border-radius: 20px;
-            padding: 0.3rem 1rem;
-            flex: 3;
-            max-width: 500px;
+            padding: 0.3rem 0.3rem 0.3rem 1rem;  /* отступ справа уменьшен, так как там будет кнопка */
+            flex: 2;
+            max-width: 600px;
+            transition: all 0.2s ease;
         }
+
         .search-box input {
             border: none;
-            color: #ffc638;
+            color: #d5a52f;
             background: transparent;
             padding: 0.5rem;
             width: 100%;
             outline: none;
             font-size: 1rem;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
         }
-        .search-box button {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: #039cbe;
+
+        /* Иконка поиска */
+        .search {
+            width: 27px;
+            height: 27px;
+            display: block;
+            margin-right: 4px;
+            transition: filter 0.2s ease;
         }
-        .search-box button:hover { color: #4CAF50; }
+
+        .search-button:hover .search {
+            filter: brightness(2);  /* картинка становится ярче */
+        }
+
+        .search-box:hover {
+            background: rgb(221, 91, 0, 0.2);
+        }
+
+        /* Плейсхолдер */
+        .search-box input::placeholder {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
+            color: rgba(255, 198, 56, 0.7);
+            font-style: italic;
+            font-size: 1rem;
+            opacity: 1;
+        }
+
         .user-info {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
             display: flex;
             gap: 1rem;
             align-items: center;
+            margin-top: 0px;
             margin-left: auto;  /* прижимает блок к правому краю */
         }
         .user-info a {
             text-decoration: none;
-            color: #b34804;
+            color: #cc570b;
             display: flex;
             align-items: center;
             gap: 0.3rem;
         }
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #333;
-        }
-        .icon-btn:hover { color: #4CAF50; }
+
         .admin-badge {
-            background: gold;
+            position: absolute;
+            top: -35px;
+            right: 10px;
+            background: #ffc638;
+            color: #cc570b;
             padding: 0.2rem 0.6rem;
             border-radius: 4px;
             font-weight: bold;
             font-size: 0.8rem;
             margin-left: 0.3rem;
+            z-index: 10;
         }
         .logout-btn {
             background: none;
             color: #ffc638;
-            border: 1px solid #b34804;
+            border: 1px solid #cc570b;
             padding: 0.4rem 1rem;
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
         }
-        .logout-btn:hover { background: #b34804; }
+        .logout-btn:hover { background: #cc570b; }
 
         .main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
         .products-area {
@@ -179,14 +222,6 @@
             align-items: center;
             text-align: center;
             color: #777;
-        }
-        .footer {
-            text-align: center;
-            padding: 1rem;
-            color: #777;
-            font-size: 0.9rem;
-            border-top: 3px solid #ffb6c1;
-            margin-top: 2rem;
         }
 
         /* Модальные окна (без изменений) */
@@ -339,15 +374,203 @@
             width: 100%;
             height: 400px;
         }
-        .cart-icon {
-            width: 68px;        /* ширина иконки */
-            height: 68px;       /* высота иконки */
-            vertical-align: middle; /* выравнивание по центру строки */
-        }
-        .profile-icon1 {
+        .cart-icon2 {
             width: 50px;        /* ширина иконки */
             height: 50px;       /* высота иконки */
             vertical-align: middle; /* выравнивание по центру строки */
+        }
+        .profile-icon2 {
+            width: 50px;        /* ширина иконки */
+            height: 50px;       /* высота иконки */
+            filter: saturate(120%);
+            vertical-align: middle; /* выравнивание по центру строки */
+        }
+        /* Стили для кнопок-иконок с подписями */
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+            display: inline-flex;
+            flex-direction: column;    /* иконка сверху, подпись снизу */
+            align-items: center;
+            text-decoration: none;
+            gap: 4px;                  /* отступ между иконкой и подписью */
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Подпись: всегда видна */
+        .icon-label {
+            font-size: 0.8rem;
+            color: #d65b0c;             /* обычный цвет подписи */
+            line-height: 1.2;
+            text-align: center;
+            transition: all 0.2s ease;  /* плавное изменение всех свойств */
+            pointer-events: none;       /* чтобы подпись не перехватывала клики */
+        }
+
+        /* При наведении на всю кнопку меняем цвет подписи */
+        .icon-btn:hover .icon-label {
+            color: #ffc638;             /* новый цвет при наведении (жёлтый) */
+            text-shadow: 0 0 5px #ffc638; /* небольшое свечение (опционально) */
+        }
+        .footer {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 500;
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            );
+            color: #ffc638;
+            border-top: 3px solid #ffb6c1;
+            margin-top: 3rem;
+            padding: 2rem 0 0;
+            font-size: 0.95rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .footer-column h3 {
+            color: #ffb6c1;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: #ffb6c1;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-column a {
+            color: #ffc638;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: #ffb6c1;
+            text-decoration: underline;
+        }
+
+        /* Социальные сети */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links img {
+            width: 32px;    /* нужная ширина */
+            height: 32px;   /* нужная высота (лучше указать, чтобы не искажалось) */
+            object-fit: contain; /* чтобы картинка вписалась без искажений */
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 198, 56, 0.1);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            background: #ffc638;
+            color: #010a18 !important;
+            transform: translateY(-3px);
+        }
+
+        .payment-icons span {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Нижняя полоса копирайта */
+        .footer-bottom {
+            text-align: center;
+            padding: 2rem 2rem;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 182, 193, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .footer-column:first-child,
+        .footer-column:first-child a,
+        .footer-column:first-child li {
+            color: #00cdfd; /* синий */
+        }
+
+        .footer-column:first-child a {
+            color: #00cdfd; /* для ссылок */
+        }
+
+        .footer-column:first-child a:hover {
+            color: #ffb6c1; /* цвет при наведении (можно оставить розовый или изменить) */
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 900px) {
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-column {
+                text-align: center;
+            }
+
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
         }
     </style>
     <!-- Яндекс Карты (ключ тот же) -->
@@ -357,8 +580,7 @@
 <header class="header">
     <!-- Фоновое видео -->
     <video class="header-video" autoplay muted loop playsinline>
-        <source src="/video/tvsd2header.mp4" type="video/mp4">
-        <source src="/video/tvsd2header.webm" type="video/webm">
+        <source src="/video/tvsd2header5.mp4" type="video/mp4">
         Ваш браузер не поддерживает видео.
     </video>
 
@@ -371,7 +593,9 @@
         </div>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
-            <button id="searchBtn">⚡</button>
+            <div class="search-button" id="searchBtn">
+                <img src="/images/search.png" alt="Поиск" class="search">
+            </div>
         </div>
     </div>
 
@@ -458,17 +682,62 @@
 </main>
 
 <footer class="footer">
-    &copy; 2026 MarketDM. Все права защищены.
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>О компании</h3>
+            <ul>
+                <li><a href="/about.html">О нас</a></li>
+                <li><a href="/jobs.html">Вакансии</a></li>
+                <li><a href="/blog.html">Блог</a></li>
+                <li><a href="/terms.html">Условия использования</a></li>
+                <li><a href="/privacy.html">Политика конфиденциальности</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Помощь</h3>
+            <ul>
+                <li><a href="/delivery.html">Доставка и оплата</a></li>
+                <li><a href="/return.html">Возврат товара</a></li>
+                <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
+                <li><a href="/support.html">Служба поддержки</a></li>
+                <li><a href="/feedback.html">Оставить отзыв</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Контакты</h3>
+            <ul>
+                <li><a href="tel:+7**********">+7 (***) ***-**-**</a></li>
+                <li><a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Мы в соцсетях</h3>
+            <div class="social-links">
+                <a href="/vk.html" class="social-link"><img src="/images/vk.png" alt="Vkontakte"></a>
+                <a href="/tg.html" class="social-link"><img src="/images/tg.png" alt="Telegram"></a>
+                <a href="/what.html" class="social-link"><img src="/images/what.png" alt="Whatsapp"></a>
+                <a href="/inst.html" class="social-link"><img src="/images/inst.png" alt="Instagram"></a>
+                <a href="/you.html" class="social-link"><img src="/images/you.png" alt="Youtube"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 MarketDM. Все права защищены.</p>
+    </div>
 </footer>
 
 <script>
     // ---------- Данные ПВЗ ----------
     const pickupPoints = [
-        { id: 1, name: 'ПВЗ на Тверской', address: 'ул. Тверская, 7', coords: [55.757, 37.615] },
-        { id: 2, name: 'ПВЗ на Арбате', address: 'ул. Арбат, 20', coords: [55.751, 37.590] },
-        { id: 3, name: 'ПВЗ в ТЦ "Европейский"', address: 'пл. Киевского вокзала, 2', coords: [55.743, 37.565] },
-        { id: 4, name: 'ПВЗ на Ленинском', address: 'Ленинский пр-т, 45', coords: [55.708, 37.582] },
-        { id: 5, name: 'ПВЗ на ВДНХ', address: 'пр-т Мира, 119', coords: [55.826, 37.639] }
+        { id: 1, name: 'ПВЗ на Тверской', address: 'ул. Тверская, 7', city: 'Москва', coords: [55.757, 37.615] },
+        { id: 2, name: 'ПВЗ на Арбате', address: 'ул. Арбат, 20', city: 'Москва', coords: [55.751, 37.590] },
+        { id: 3, name: 'ПВЗ в ТЦ "Европейский"', address: 'пл. Киевского вокзала, 2', city: 'Москва', coords: [55.743, 37.565] },
+        { id: 4, name: 'ПВЗ на Ленинском', address: 'Ленинский пр-т, 45', city: 'Москва', coords: [55.708, 37.582] },
+        { id: 5, name: 'ПВЗ на ВДНХ', address: 'пр-т Мира, 119', city: 'Москва', coords: [55.826, 37.639] }
     ];
 
     // ---------- Элементы DOM ----------
@@ -692,8 +961,8 @@
     }
 
     function selectPickupPoint(point) {
-        currentAddressSpan.textContent = point.address;
-        localStorage.setItem('deliveryAddress', point.address);
+        currentAddressSpan.textContent = point.city + ', ' + point.address;
+        localStorage.setItem('deliveryAddress', point.city + ', ' + point.address);
         localStorage.removeItem('deliveryDetails');
         closeChoiceModalFn();
     }
@@ -802,8 +1071,8 @@
             if (response.ok) {
                 const user = await response.json();
                 const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
-                let userHtml = `<a href="/cart.html" class="icon-btn" title="Корзина"><img src="/images/cart-icon.png" alt="Корзина" class="cart-icon"></a><a href="/profile.html" class="icon-btn" title="Профиль"><img src="/images/profile-icon1.png" alt="Профиль" class="profile-icon1"></a>`;
-                if (isAdmin) userHtml += '<span class="admin-badge">Админ</span>';
+                let userHtml = '<a href="/cart-icon2.html" class="icon-btn"><img src="/images/cart-icon2.png" alt="Корзина" class="cart-icon2"><span class="icon-label">Корзина</span></a><a href="/profile-icon2.html" class="icon-btn"><img src="/images/profile-icon2.png" alt="Профиль" class="profile-icon2"><span class="icon-label">Профиль</span></a>';
+                if (isAdmin) userHtml += '<span class="admin-badge">ADMIN</span>';
                 userHtml += '<button class="logout-btn" id="logoutBtn">Выйти</button>';
                 userInfoDiv.innerHTML = userHtml;
                 document.getElementById('logoutBtn').addEventListener('click', () => {
