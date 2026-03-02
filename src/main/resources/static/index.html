@@ -69,8 +69,16 @@
             flex-wrap: wrap;
             margin-top: -22px;
             flex: 1;
+            position: relative;
         }
-
+        .logo {
+            font-size: 2.8rem;
+            color: #00cdfd;
+            cursor: pointer;
+            margin-left: -180px;  /* добавить отступ слева */
+            margin-right: 7px; /* добавить отступ справа */
+            order: 2;
+        }
         .catalog-btn {
             background: #00cdfd;
             color: #002951;
@@ -80,21 +88,29 @@
             font-size: 1rem;
             cursor: pointer;
             font-weight: bold;
-            position: relative;
-            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            order: 3;               /* визуально третий */
         }
+        /* Иконка каталога */
+        .catalog-icon {
+            width: 20px;
+            height: 20px;
+            display: block;
+            transition: all 0.2s ease;  /* плавное изменение */
+        }
+        /* Подсветка иконки при наведении на всю кнопку */
+        .catalog-btn:hover .catalog-icon {
+            filter: brightness(0) invert(1) drop-shadow(0 0 5px #006d81);
+            transform: scale(1.3);  /* чуть увеличиваем для эффекта */
+        }
+
         .catalog-btn:hover { background: #0fa8cc; }
-        .logo {
-            font-size: 1.8rem;
-            color: #00cdfd;
-            cursor: pointer;
-            margin-top: -115px;
-            margin-left: -153px;  /* добавить отступ слева */
-            margin-right: 10px; /* добавить отступ справа */
-        }
+
         .address-picker {
             display: flex;
-            font-size: 12px;           /*длина текста*/
+            font-size: 13px;           /*длина текста*/
             align-items: center;
             gap: 8px;
             cursor: pointer;
@@ -107,13 +123,17 @@
             padding: 4px 8px;          /* добавляем немного внутренних отступов, чтобы фон был красивым */
             border-radius: 20px;       /* мягкое скругление для фона */
             transition: all 0.2s ease; /* плавность всех изменений */
+            order: 1;               /* визуально первый */
+            margin-left: 0;          /* убираем лишние отступы */
+            margin-top: -115px;      /* поднимаем на уровень логотипа */
+            margin-right: 10px;
         }
 
         /* Эффект при наведении */
         .address-picker:hover {
-            background: rgba(0, 205, 253, 0.1);  /* полупрозрачный жёлтый фон */
-            color: #11c3f4;                         /* текст становится синим */
-            transform: scale(1.02);                  /* лёгкое увеличение (по желанию) */
+            background: rgba(0, 205, 253, 0.06);  /* полупрозрачный синий фон */
+            color: #12cdff;                         /* текст становится синим */
+            transform: scale(1.1);                  /* лёгкое увеличение (по желанию) */
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* небольшая тень (по желанию) */
         }
 
@@ -127,6 +147,7 @@
             flex: 2;
             max-width: 600px;
             transition: all 0.2s ease;
+            order: 4;
         }
 
         .search-box input {
@@ -163,7 +184,6 @@
             font-family: 'Segoe UI', 'Arial', sans-serif;
             font-weight: 400;
             color: rgba(255, 198, 56, 0.7);
-            font-style: italic;
             font-size: 1rem;
             opacity: 1;
         }
@@ -205,9 +225,11 @@
             padding: 0.4rem 1rem;
             border-radius: 4px;
             cursor: pointer;
+            margin-left: 0.1rem;
+            margin-top: -1.2rem;
             font-size: 1rem;
         }
-        .logout-btn:hover { background: #cc570b; }
+        .logout-btn:hover { background: rgb(221, 91, 0, 0.2); }
 
         .main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
         .products-area {
@@ -586,11 +608,21 @@
 
     <!-- Левая группа: элементы, которые нужно сдвинуть вправо -->
     <div class="header-left-group">
-        <button class="catalog-btn" id="catalogBtn">Каталог</button>
+        <!-- 1. Логотип (был вторым, станет первым) -->
         <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+
+        <!-- 2. Кнопка каталога (была первой, станет второй) -->
+        <button class="catalog-btn" id="catalogBtn">
+            <img src="/images/catalog-icon1.png" alt="Каталог" class="catalog-icon">
+            <span>Каталог</span>
+        </button>
+
+        <!-- 3. Адрес (был третьим, остаётся третьим, но мы его передвинем CSS) -->
         <div class="address-picker" id="addressPicker">
             <span id="currentAddress">Адрес доставки</span>
         </div>
+
+        <!-- 4. Поиск (без изменений) -->
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
             <div class="search-button" id="searchBtn">
