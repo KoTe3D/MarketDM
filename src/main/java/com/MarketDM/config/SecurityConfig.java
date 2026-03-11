@@ -123,6 +123,55 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Основной веб-интерфейс: главная, каталог, корзина, регистрация и т.д.
+     */
+    @Bean
+    @Order(3)
+    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/**") // Ловит всё, что не подошло под /api и /admin
+                .authenticationProvider(authenticationProvider())
+                .authorizeHttpRequests(auth -> auth
+                        // Публичные страницы
+                        .requestMatchers("/", "/login", "/register", "/products", "/categories", "/search")
+                        .permitAll()
+                        // Статические ресурсы
+                        .requestMatchers("/error","/images/**", "/css/**", "/js/**", "/favicon.*")
+                        .permitAll()
+                        // Страницы для авторизованных
+                        .requestMatchers("/cart", "/profile", "/orders")
+                        .authenticated()
+                        // Всё остальное
+                        .anyRequest().permitAll() // или authenticated(), по вашему усмотрению
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                )
+                .sessionManagement(sess -> sess
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
+                .rememberMe(remember -> remember
+                        .key(rememberMeKey)
+                        .tokenValiditySeconds(86400 * 7) // 7 дней
+                )
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**", "/mobile/**") // если используете
+                );
+
+        return http.build();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);

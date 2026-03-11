@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            );
+            color: #ffc638;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffb6c1;
+        }
+
+        /* ТЕКСТ НАД КАРТИНКОЙ */
+        .error-message-top {
+            font-size: 1.3rem;
+            margin: 0 0 1rem 0;  /* Отступ снизу перед картинкой */
+            line-height: 1.5;
+            color: #ffc638;
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ КАРТИНКИ И ЦИФРЫ ПОВЕРХ */
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 1rem 0 1.5rem 0;  /* Отступы сверху и снизу */
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* КАРТИНКА */
+        .error-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+            /* УБИРАЕМ ЗНАЧОК ПОИСКА */
+            pointer-events: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            draggable: false;
+        }
+
+        /* ЦИФРА ОШИБКИ ПОВЕРХ КАРТИНКИ */
+        .status-overlay {
+            position: absolute;
+            /* ==== НАСТРОЙТЕ ПОД ВАШУ КАРТИНКУ ==== */
+            top: 16%;
+            left: 17%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            /* =================================== */
+
+            font-size: 48px;
+            font-weight: 900;
+            color: #00cdfd;
+            letter-spacing: 1px;
+            text-shadow:
+                    3px 3px 0 #000,
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            z-index: 10;
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Скрываем старые классы сообщений (они больше не используются) */
+        .error-message {
+            display: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(211, 98, 19, 0.0);
+            color: #ffc638;
+            border: 1px solid #d3a42f;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .back-link:hover { background: rgba(211, 98, 19, 0.1); }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <!-- ТЕПЕРЬ ТЕКСТ НАД КАРТИНКОЙ -->
+    <div class="error-message-top" th:text="${errorTitle}">Внутренняя ошибка сервера</div>
+    <div class="error-message-top" th:text="${errorMessage}">Что-то пошло не так.</div>
+
+    <!-- КАРТИНКА С ЦИФРОЙ -->
+    <div class="image-wrapper">
+        <img th:src="@{/images/windowstatuscod.png}"
+             alt="Error Image"
+             class="error-image"
+             draggable="false">
+        <div class="status-overlay" th:text="${statusCode}">404</div>
+    </div>
+
+    <!-- ССЫЛКА ОСТАЛАСЬ ПОД КАРТИНКОЙ -->
+    <a th:href="@{/}" class="back-link">← Вернуться на главную</a>
+</div>
+</body>
+</html>
