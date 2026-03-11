@@ -18,7 +18,7 @@ public class CustomErrorController implements ErrorController {
         Object path = request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
 
         int statusCode = 500;
-        String errorTitle = "Ошибка сервера";
+        String errorTitle = "Ошибка сервера.";
         String errorMessage = "Что-то пошло не так. Пожалуйста, попробуйте позже.";
 
         if (status != null) {
@@ -26,33 +26,33 @@ public class CustomErrorController implements ErrorController {
 
             switch (statusCode) {
                 case 400:
-                    errorTitle = "Плохой запрос";
+                    errorTitle = "Плохой запрос.";
                     errorMessage = "Ваш запрос содержит ошибки. Проверьте данные.";
                     break;
                 case 401:
-                    errorTitle = "Требуется авторизация";
+                    errorTitle = "Требуется авторизация.";
                     errorMessage = "Пожалуйста, войдите в систему.";
                     break;
                 case 403:
-                    errorTitle = "Доступ запрещён";
+                    errorTitle = "Доступ запрещён.";
                     errorMessage = "У вас нет прав для просмотра этой страницы.";
                     break;
                 case 404:
-                    errorTitle = "Страница не найдена";
+                    errorTitle = "Страница не найдена.";
                     errorMessage = "Извините, мы не можем найти то, что вы ищете.";
                     break;
                 case 405:
-                    errorTitle = "Метод не разрешён";
+                    errorTitle = "Метод не разрешён.";
                     errorMessage = "Этот метод запроса не поддерживается.";
                     break;
                 case 500:
-                    errorTitle = "Ошибка сервера";
+                    errorTitle = "Ошибка сервера.";
                     errorMessage = "На сервере произошла ошибка. Мы уже работаем над этим.";
                     break;
                 case 502:
                 case 503:
                 case 504:
-                    errorTitle = "Сервис временно недоступен";
+                    errorTitle = "Сервис временно недоступен.";
                     errorMessage = "Сервер перегружен или ведутся технические работы. Попробуйте позже.";
                     break;
                 default:
