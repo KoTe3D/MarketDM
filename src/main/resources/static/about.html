@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>MarketDM - О нас</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      color: #ffc638;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Шапка (такая же как на главной) */
+    .header {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      padding: 3.5rem 2rem;
+      height: 164px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      color: #ffc638;
+      min-height: 120px;
+      border-bottom: 3px solid #ffb6c1;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .header > *:not(.header-video) {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-left-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-left: 200px;
+      flex-wrap: wrap;
+      margin-top: -22px;
+      flex: 1;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 2.8rem;
+      color: #00cdfd;
+      cursor: pointer;
+      margin-left: -180px;
+      margin-right: 7px;
+      order: 2;
+    }
+
+    .logo a {
+      color: #00cdfd;
+      text-decoration: none;
+    }
+
+    .catalog-btn {
+      background: #00cdfd;
+      color: #002951;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      order: 3;
+    }
+
+    .catalog-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .catalog-btn:hover .catalog-icon {
+      filter: brightness(0) invert(1) drop-shadow(0 0 5px #006d81);
+      transform: scale(1.3);
+    }
+
+    .catalog-btn:hover { background: #0fa8cc; }
+
+    .address-picker {
+      display: flex;
+      font-size: 13px;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex: 0 1 auto;
+      max-width: 400px;
+      color: #0dc0e8;
+      font-weight: 500;
+      background: none;
+      padding: 4px 8px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      order: 1;
+      margin-left: 0;
+      margin-top: -115px;
+      margin-right: 10px;
+    }
+
+    .address-picker:hover {
+      background: rgba(0, 205, 253, 0.06);
+      color: #12cdff;
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: rgba(204, 87, 11, 0);
+      border: 1px solid #d3a42f;
+      border-radius: 20px;
+      padding: 0.3rem 0.3rem 0.3rem 1rem;
+      flex: 2;
+      max-width: 600px;
+      transition: all 0.2s ease;
+      order: 4;
+    }
+
+    .search-box input {
+      border: none;
+      color: #d5a52f;
+      background: transparent;
+      padding: 0.5rem;
+      width: 100%;
+      outline: none;
+      font-size: 1rem;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+    }
+
+    .search {
+      width: 27px;
+      height: 27px;
+      display: block;
+      margin-right: 4px;
+      transition: filter 0.2s ease;
+    }
+
+    .search-button:hover .search {
+      filter: brightness(2);
+    }
+
+    .search-box:hover {
+      background: rgb(221, 91, 0, 0.2);
+    }
+
+    .search-box input::placeholder {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      color: rgba(255, 198, 56, 0.7);
+      font-size: 1rem;
+      opacity: 1;
+    }
+
+    .user-info {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 0px;
+      margin-left: auto;
+    }
+
+    .user-info a {
+      text-decoration: none;
+      color: #cc570b;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .cart-icon2, .profile-icon2 {
+      width: 50px;
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .profile-icon2 {
+      filter: saturate(120%);
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #333;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      gap: 4px;
+      position: relative;
+      z-index: 20;
+    }
+
+    .icon-label {
+      font-size: 0.8rem;
+      color: #d65b0c;
+      line-height: 1.2;
+      text-align: center;
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .icon-btn:hover .icon-label {
+      color: #ffc638;
+      text-shadow: 0 0 5px #ffc638;
+    }
+
+    .logout-btn {
+      background: none;
+      color: #ffc638;
+      border: 1px solid #cc570b;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 0.1rem;
+      margin-top: -1.2rem;
+      font-size: 1rem;
+    }
+
+    .logout-btn:hover { background: rgb(221, 91, 0, 0.2); }
+
+    /* Основной контент страницы "О нас" */
+    .about-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      flex: 1;
+    }
+
+    .about-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .about-header h1 {
+      font-size: 3rem;
+      color: #ffc638;
+      text-shadow: 3px 3px 0 #cc570b;
+      margin-bottom: 1rem;
+    }
+
+    .about-header p {
+      font-size: 1.2rem;
+      color: #ffb6c1;
+    }
+
+    .about-section {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border: 2px solid #ffb6c1;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .about-section h2 {
+      color: #00cdfd;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #ffb6c1;
+      padding-bottom: 0.5rem;
+    }
+
+    .about-section h2 i {
+      margin-right: 10px;
+      color: #ffc638;
+    }
+
+    .about-section p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .about-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Галерея изображений */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .gallery-item {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 205, 253, 0.3);
+    }
+
+    .gallery-item img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 5px 15px rgba(255, 198, 56, 0.3));
+    }
+
+    .gallery-item h3 {
+      color: #ffc638;
+      font-size: 1.3rem;
+    }
+
+    /* Преимущества */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .feature {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 205, 253, 0.1);
+      border-radius: 15px;
+      border: 1px solid #ffb6c1;
+      transition: all 0.3s;
+    }
+
+    .feature:hover {
+      background: rgba(0, 205, 253, 0.2);
+      transform: scale(1.05);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature h3 {
+      color: #ffc638;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature p {
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    /* Команда */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .team-member {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255, 182, 193, 0.1);
+      border-radius: 15px;
+      border: 1px solid #ffb6c1;
+    }
+
+    .team-member img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 3px solid #ffc638;
+    }
+
+    .team-member h3 {
+      color: #00cdfd;
+      margin-bottom: 0.3rem;
+    }
+
+    .team-member p {
+      color: #ffb6c1;
+      font-size: 0.9rem;
+    }
+
+    /* Футер (такой же как на главной) */
+    .footer {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 500;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      color: #ffc638;
+      border-top: 3px solid #ffb6c1;
+      margin-top: 3rem;
+      padding: 2rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 0 2rem;
+    }
+
+    .footer-column h3 {
+      color: #ffb6c1;
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 2px;
+      background: #ffb6c1;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.7rem;
+    }
+
+    .footer-column a {
+      color: #ffc638;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-column a:hover {
+      color: #ffb6c1;
+      text-decoration: underline;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-links img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 198, 56, 0.1);
+      border-radius: 50%;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .social-link:hover {
+      background: #ffc638;
+      color: #010a18 !important;
+      transform: translateY(-3px);
+    }
+
+    /* Тултипы для соцсетей */
+    .social-link::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #ffc638;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border: 1px solid #ffb6c1;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .social-link:hover::after {
+      opacity: 1;
+      visibility: visible;
+      bottom: 140%;
+    }
+
+    .social-link::before {
+      content: '';
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 8px solid transparent;
+      border-top-color: #000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .social-link:hover::before {
+      opacity: 1;
+      visibility: visible;
+      bottom: 130%;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 2rem 2rem;
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid rgba(255, 182, 193, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .footer-column:first-child,
+    .footer-column:first-child a,
+    .footer-column:first-child li {
+      color: #00cdfd;
+    }
+
+    .footer-column:first-child a {
+      color: #00cdfd;
+    }
+
+    .footer-column:first-child a:hover {
+      color: #ffb6c1;
+    }
+
+    /* Модальное окно для соцсетей */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+      text-align: center;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 0.5rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close-btn:hover { color: #333; }
+
+    .continue-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .continue-btn:hover { background: #45a049; }
+
+    @media (max-width: 768px) {
+      .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <video class="header-video" autoplay muted loop playsinline>
+    <source src="/video/tvsd2header5.mp4" type="video/mp4">
+  </video>
+
+  <div class="header-left-group">
+    <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+
+    <button class="catalog-btn" id="catalogBtn" onclick="window.location.href='/'">
+      <img src="/images/catalog-icon1.png" alt="Каталог" class="catalog-icon">
+      <span>Каталог</span>
+    </button>
+
+    <div class="address-picker" id="addressPicker">
+      <span id="currentAddress">Адрес доставки</span>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
+      <div class="search-button" id="searchBtn">
+        <img src="/images/search.png" alt="Поиск" class="search">
+      </div>
+    </div>
+  </div>
+
+  <div class="user-info" id="userInfo"></div>
+</header>
+
+<main class="about-container">
+  <div class="about-header">
+    <h1>О нас</h1>
+    <p>MarketDM - ваш проводник в мир комиксов и аниме!</p>
+  </div>
+
+  <!-- Кто мы -->
+  <div class="about-section">
+    <h2>Кто мы</h2>
+    <p>MarketDM - это не просто магазин, это место, где оживают ваши любимые вселенные! Мы собрали лучшие комиксы, мангу, аниме-фигурки и коллекционные предметы со всего мира. Наша миссия - сделать мир поп-культуры доступным для каждого фаната в России.</p>
+    <p>Начиная с 2025 года как небольшой клуб коллекционеров, сегодня мы выросли в крупнейшую платформу для гиков и отаку. Но мы остались верны своим корням: каждый клиент для нас - прежде всего друг и единомышленник.</p>
+  </div>
+
+  <!-- Что мы продаем -->
+  <div class="about-section">
+    <h2>Что вы найдете у нас</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="/images/comics-icon.png" alt="Комиксы">
+        <h3>Комиксы</h3>
+        <p>Marvel, DC, Image, Dark Horse и независимые издательства</p>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/manga-icon.png" alt="Манга">
+        <h3>Манга</h3>
+        <p>Классика и новинки от Shueisha, Kodansha, Shogakukan</p>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/figure-icon.png" alt="Фигурки">
+        <h3>Аниме-фигурки</h3>
+        <p>Nendoroid, Figma, Scale Figures и эксклюзивы</p>
+      </div>
+      <div class="gallery-item">
+        <img src="/images/merch-icon.png" alt="Мерч">
+        <h3>Мерч и коллекционки</h3>
+        <p>Постеры, постеры, аксессуары и лимитированные издания</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Наши преимущества -->
+  <div class="about-section">
+    <h2>Почему выбирают нас</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-icon">🌍</span>
+        <h3>Оригиналы</h3>
+        <p>Только лицензионная продукция от официальных дистрибьюторов</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🚚</span>
+        <h3>Быстрая доставка</h3>
+        <p>Доставляем по всей России от 1 дня курьером или в пункты выдачи</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">💎</span>
+        <h3>Редкие экземпляры</h3>
+        <p>Эксклюзивные издания и фигурки, которых нет у других</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🎁</span>
+        <h3>Подарки</h3>
+        <p>Бонусы и подарки каждому покупателю</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Наша команда -->
+  <div class="about-section">
+    <h2>Наша команда</h2>
+    <p>Мы - такие же фанаты, как и вы. Днём мы упаковываем заказы, а ночью читаем новые выпуски и смотрим шикимори. Каждый член команды - эксперт в своём направлении, поэтому мы всегда подскажем, какую фигурку лучше взять или с чего начать чтение манги.</p>
+    <div class="team-grid">
+      <div class="team-member">
+        <img src="/images/team1.jpg" alt="Данила">
+        <h3>Данила</h3>
+        <p>Основатель, главный программист и любитель Аниме</p>
+      </div>
+      <div class="team-member">
+        <img src="/images/team2.jpg" alt="Кирилл">
+        <h3>Кирилл</h3>
+        <p>Эксперт по манге и японской культуре</p>
+      </div>
+      <div class="team-member">
+        <img src="/images/team3.jpg" alt="Дмитрий">
+        <h3>Дмитрий</h3>
+        <p>Гуру по фигуркам и редким коллекциям</p>
+      </div>
+      <div class="team-member">
+        <img src="/images/team4.jpg" alt="Лера">
+        <h3>Лера</h3>
+        <p>Поддержка клиентов и комьюнити-менеджер</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Контакты -->
+  <div class="about-section">
+    <h2>Свяжитесь с нами</h2>
+    <p>Мы всегда на связи и готовы ответить на любые вопросы о комиксах, фигурках или заказах.</p>
+    <p style="margin-top: 1rem;">Мы в соцсетях: делимся новостями, анонсами и эксклюзивными предложениями!</p>
+    <p>+7 (***) ***-**-** (ежедневно с 10:00 до 21:00)</p>
+    <p style="margin-top: 1rem;"><a href="mailto:MarketDM@mail.ru" style="color: #ffc638;">MarketDM@mail.ru</a></p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>О компании</h3>
+      <ul>
+        <li><a href="/about.html">О нас</a></li>
+        <li><a href="/jobs.html">Вакансии</a></li>
+        <li><a href="/blog.html">Блог</a></li>
+        <li><a href="/terms.html">Условия использования</a></li>
+        <li><a href="/privacy.html">Политика конфиденциальности</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Помощь</h3>
+      <ul>
+        <li><a href="/delivery.html">Доставка и оплата</a></li>
+        <li><a href="/return.html">Возврат товара</a></li>
+        <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
+        <li><a href="/support.html">Служба поддержки</a></li>
+        <li><a href="/feedback.html">Оставить отзыв</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Контакты</h3>
+      <ul>
+        <li><a href="tel:+7**********">+7 (***) ***-**-**</a></li>
+        <li><a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Мы в соцсетях</h3>
+      <div class="social-links">
+        <a href="#" onclick="openSocialModal('VK')" data-tooltip="VK (скоро)" class="social-link"><img src="/images/vk.png" alt="Vkontakte"></a>
+        <a href="#" onclick="openSocialModal('Telegram')" data-tooltip="Telegram (скоро)" class="social-link"><img src="/images/tg.png" alt="Telegram"></a>
+        <a href="#" onclick="openSocialModal('WhatsApp')" data-tooltip="WhatsApp (скоро)" class="social-link"><img src="/images/what.png" alt="Whatsapp"></a>
+        <a href="#" onclick="openSocialModal('Instagram')" data-tooltip="Instagram (скоро)" class="social-link"><img src="/images/inst.png" alt="Instagram"></a>
+        <a href="#" onclick="openSocialModal('YouTube')" data-tooltip="YouTube (скоро)" class="social-link"><img src="/images/you.png" alt="Youtube"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 MarketDM. Все права защищены.</p>
+  </div>
+</footer>
+
+<!-- Модальное окно для соцсетей -->
+<div class="modal" id="socialModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="socialModalTitle">Скоро появится</h3>
+      <button class="close-btn" id="closeSocialModal">&times;</button>
+    </div>
+    <div style="padding: 2rem;">
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;" id="socialModalMessage">Здесь будет ваш Telegram</p>
+      <button class="continue-btn" id="socialModalBtn">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Функции для модального окна соцсетей ----------
+  const socialModal = document.getElementById('socialModal');
+  const closeSocialModal = document.getElementById('closeSocialModal');
+  const socialModalTitle = document.getElementById('socialModalTitle');
+  const socialModalMessage = document.getElementById('socialModalMessage');
+  const socialModalBtn = document.getElementById('socialModalBtn');
+
+  function openSocialModal(socialName) {
+    socialModalTitle.textContent = 'Скоро появится';
+    socialModalMessage.textContent = `Здесь будет ваш ${socialName}`;
+    socialModal.classList.add('show');
+  }
+
+  function closeSocialModalFn() {
+    socialModal.classList.remove('show');
+  }
+
+  closeSocialModal.addEventListener('click', closeSocialModalFn);
+  socialModalBtn.addEventListener('click', closeSocialModalFn);
+  socialModal.addEventListener('click', (e) => {
+    if (e.target === socialModal) closeSocialModalFn();
+  });
+
+  // ---------- Профиль (как на главной) ----------
+  async function loadUserInfo() {
+    const token = localStorage.getItem('jwt');
+    const userInfoDiv = document.getElementById('userInfo');
+    if (!token) {
+      userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+      return;
+    }
+    try {
+      const response = await fetch('/api/users/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (response.ok) {
+        const user = await response.json();
+        const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
+        let userHtml = '<a href="/cart-icon2.html" class="icon-btn"><img src="/images/cart-icon2.png" alt="Корзина" class="cart-icon2"><span class="icon-label">Корзина</span></a><a href="/profile-icon2.html" class="icon-btn"><img src="/images/profile-icon2.png" alt="Профиль" class="profile-icon2"><span class="icon-label">Профиль</span></a>';
+        if (isAdmin) userHtml += '<span class="admin-badge">ADMIN</span>';
+        userHtml += '<button class="logout-btn" id="logoutBtn">Выйти</button>';
+        userInfoDiv.innerHTML = userHtml;
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          localStorage.removeItem('jwt');
+          window.location.href = '/login.html';
+        });
+      } else {
+        localStorage.removeItem('jwt');
+        userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+      }
+    } catch (err) {
+      console.error('Ошибка загрузки профиля', err);
+      userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+    }
+  }
+
+  // ---------- Поиск ----------
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const query = document.getElementById('searchInput').value.trim();
+    if (query) {
+      window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+    }
+  });
+
+  document.getElementById('searchInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+  });
+
+  // ---------- Инициализация ----------
+  window.addEventListener('load', () => {
+    loadUserInfo();
+  });
+</script>
+</body>
+</html>

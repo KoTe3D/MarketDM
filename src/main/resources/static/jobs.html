@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>MarketDM - Вакансии</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      color: #ffc638;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Шапка (такая же как в blog.html) */
+    .header {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      padding: 3.5rem 2rem;
+      height: 164px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      color: #ffc638;
+      min-height: 120px;
+      border-bottom: 3px solid #ffb6c1;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .header > *:not(.header-video) {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-left-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-left: 200px;
+      flex-wrap: wrap;
+      margin-top: -22px;
+      flex: 1;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 2.8rem;
+      color: #00cdfd;
+      cursor: pointer;
+      margin-left: -180px;
+      margin-right: 7px;
+      order: 2;
+    }
+
+    .logo a {
+      color: #00cdfd;
+      text-decoration: none;
+    }
+
+    .catalog-btn {
+      background: #00cdfd;
+      color: #002951;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      order: 3;
+    }
+
+    .catalog-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .catalog-btn:hover .catalog-icon {
+      filter: brightness(0) invert(1) drop-shadow(0 0 5px #006d81);
+      transform: scale(1.3);
+    }
+
+    .catalog-btn:hover { background: #0fa8cc; }
+
+    .address-picker {
+      display: flex;
+      font-size: 13px;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex: 0 1 auto;
+      max-width: 400px;
+      color: #0dc0e8;
+      font-weight: 500;
+      background: none;
+      padding: 4px 8px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      order: 1;
+      margin-left: 0;
+      margin-top: -115px;
+      margin-right: 10px;
+    }
+
+    .address-picker:hover {
+      background: rgba(0, 205, 253, 0.06);
+      color: #12cdff;
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: rgba(204, 87, 11, 0);
+      border: 1px solid #d3a42f;
+      border-radius: 20px;
+      padding: 0.3rem 0.3rem 0.3rem 1rem;
+      flex: 2;
+      max-width: 600px;
+      transition: all 0.2s ease;
+      order: 4;
+    }
+
+    .search-box input {
+      border: none;
+      color: #d5a52f;
+      background: transparent;
+      padding: 0.5rem;
+      width: 100%;
+      outline: none;
+      font-size: 1rem;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+    }
+
+    .search {
+      width: 27px;
+      height: 27px;
+      display: block;
+      margin-right: 4px;
+      transition: filter 0.2s ease;
+    }
+
+    .search-button:hover .search {
+      filter: brightness(2);
+    }
+
+    .search-box:hover {
+      background: rgb(221, 91, 0, 0.2);
+    }
+
+    .search-box input::placeholder {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      color: rgba(255, 198, 56, 0.7);
+      font-size: 1rem;
+      opacity: 1;
+    }
+
+    .user-info {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 0px;
+      margin-left: auto;
+    }
+
+    .user-info a {
+      text-decoration: none;
+      color: #cc570b;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .cart-icon2, .profile-icon2 {
+      width: 50px;
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .profile-icon2 {
+      filter: saturate(120%);
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #333;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      gap: 4px;
+      position: relative;
+      z-index: 20;
+    }
+
+    .icon-label {
+      font-size: 0.8rem;
+      color: #d65b0c;
+      line-height: 1.2;
+      text-align: center;
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .icon-btn:hover .icon-label {
+      color: #ffc638;
+      text-shadow: 0 0 5px #ffc638;
+    }
+
+    .logout-btn {
+      background: none;
+      color: #ffc638;
+      border: 1px solid #cc570b;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 0.1rem;
+      margin-top: -1.2rem;
+      font-size: 1rem;
+    }
+
+    .logout-btn:hover { background: rgb(221, 91, 0, 0.2); }
+
+    /* Основной контент страницы */
+    .jobs-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      flex: 1;
+    }
+
+    .jobs-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .jobs-header h1 {
+      font-size: 3rem;
+      color: #ffc638;
+      text-shadow: 3px 3px 0 #cc570b;
+      margin-bottom: 1rem;
+    }
+
+    .jobs-header p {
+      font-size: 1.2rem;
+      color: #ffb6c1;
+    }
+
+    /* Секция с информацией */
+    .info-section {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border: 2px solid #ffb6c1;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .info-section h2 {
+      color: #00cdfd;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #ffb6c1;
+      padding-bottom: 0.5rem;
+    }
+
+    .info-section h2 i {
+      margin-right: 10px;
+      color: #ffc638;
+    }
+
+    .info-section p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    /* Преимущества работы */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .benefit {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 205, 253, 0.1);
+      border-radius: 15px;
+      border: 1px solid #ffb6c1;
+      transition: all 0.3s;
+    }
+
+    .benefit:hover {
+      background: rgba(0, 205, 253, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .benefit-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .benefit h3 {
+      color: #ffc638;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit p {
+      color: #fff;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    /* Список вакансий */
+    .jobs-list {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .job-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #ffb6c1;
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .job-card:hover {
+      transform: translateX(10px);
+      border-color: #00cdfd;
+      box-shadow: -10px 10px 20px rgba(0, 205, 253, 0.2);
+    }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .job-title {
+      font-size: 1.8rem;
+      color: #00cdfd;
+    }
+
+    .job-badge {
+      background: #ffc638;
+      color: #002951;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .job-meta {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      color: #ffb6c1;
+      flex-wrap: wrap;
+    }
+
+    .job-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .job-description {
+      color: #fff;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .job-requirements {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .job-requirements h4 {
+      color: #ffc638;
+      margin-bottom: 0.5rem;
+    }
+
+    .job-requirements ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .job-requirements li {
+      color: #fff;
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .job-requirements li:before {
+      content: "•";
+      color: #00cdfd;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .apply-btn {
+      background: #00cdfd;
+      color: #002951;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .apply-btn:hover {
+      background: #ffc638;
+      transform: scale(1.05);
+    }
+
+    /* Форма отклика */
+    .apply-modal .modal-content {
+      max-width: 500px;
+    }
+
+    .apply-form {
+      padding: 1rem 0;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .submit-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background: #45a049;
+    }
+
+    /* Футер (такой же как на главной) */
+    .footer {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 500;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      color: #ffc638;
+      border-top: 3px solid #ffb6c1;
+      margin-top: 3rem;
+      padding: 2rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 0 2rem;
+    }
+
+    .footer-column h3 {
+      color: #ffb6c1;
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 2px;
+      background: #ffb6c1;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.7rem;
+    }
+
+    .footer-column a {
+      color: #ffc638;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-column a:hover {
+      color: #ffb6c1;
+      text-decoration: underline;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-links img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 198, 56, 0.1);
+      border-radius: 50%;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .social-link:hover {
+      background: #ffc638;
+      color: #010a18 !important;
+      transform: translateY(-3px);
+    }
+
+    .social-link::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #ffc638;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border: 1px solid #ffb6c1;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .social-link:hover::after {
+      opacity: 1;
+      visibility: visible;
+      bottom: 140%;
+    }
+
+    .social-link::before {
+      content: '';
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 8px solid transparent;
+      border-top-color: #000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .social-link:hover::before {
+      opacity: 1;
+      visibility: visible;
+      bottom: 130%;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 2rem 2rem;
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid rgba(255, 182, 193, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .footer-column:first-child,
+    .footer-column:first-child a,
+    .footer-column:first-child li {
+      color: #00cdfd;
+    }
+
+    .footer-column:first-child a {
+      color: #00cdfd;
+    }
+
+    .footer-column:first-child a:hover {
+      color: #ffb6c1;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 0.5rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close-btn:hover { color: #333; }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .job-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <video class="header-video" autoplay muted loop playsinline>
+    <source src="/video/tvsd2header5.mp4" type="video/mp4">
+  </video>
+
+  <div class="header-left-group">
+    <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+
+    <button class="catalog-btn" id="catalogBtn" onclick="window.location.href='/'">
+      <img src="/images/catalog-icon1.png" alt="Каталог" class="catalog-icon">
+      <span>Каталог</span>
+    </button>
+
+    <div class="address-picker" id="addressPicker">
+      <span id="currentAddress">Адрес доставки</span>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
+      <div class="search-button" id="searchBtn">
+        <img src="/images/search.png" alt="Поиск" class="search">
+      </div>
+    </div>
+  </div>
+
+  <div class="user-info" id="userInfo"></div>
+</header>
+
+<main class="jobs-container">
+  <div class="jobs-header">
+    <h1>Вакансии MarketDM</h1>
+    <p>Присоединяйтесь к команде фанатов поп-культуры!</p>
+  </div>
+
+  <!-- Кто мы ищем -->
+  <div class="info-section">
+    <h2>Кого мы ищем</h2>
+    <p>Мы не просто магазин — мы сообщество энтузиастов, которые живут комиксами, аниме и коллекционированием. Если вы фанат, который хочет превратить своё хобби в работу, и готовы делиться страстью с другими — нам по пути!</p>
+    <p>Мы ценим экспертность, искреннюю любовь к поп-культуре и желание развиваться. Опыт работы не главное — важнее ваш фанатский опыт и горящие глаза.</p>
+  </div>
+
+  <!-- Преимущества работы -->
+  <div class="info-section">
+    <h2>Почему у нас хорошо</h2>
+    <div class="benefits-grid">
+      <div class="benefit">
+        <span class="benefit-icon">⏰</span>
+        <h3>Гибкий график</h3>
+        <p>Работайте в удобное время, смены подбираем под вас</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">🎁</span>
+        <h3>Скидки для сотрудников</h3>
+        <p>До 30% на весь ассортимент — пополняйте коллекцию с выгодой</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">🏠</span>
+        <h3>Удаленный или офис</h3>
+        <p>Можно работать из дома или в нашем уютном офисе в центре</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">📚</span>
+        <h3>Обучение за наш счёт</h3>
+        <p>Обучим всему, что нужно знать о комиксах, манге и фигурках</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Открытые вакансии -->
+  <div class="info-section">
+    <h2>Открытые позиции</h2>
+    <div class="jobs-list">
+      <!-- Вакансия 1 -->
+      <div class="job-card">
+        <div class="job-header">
+          <h3 class="job-title">Консультант</h3>
+          <span class="job-badge">Новая</span>
+        </div>
+        <div class="job-meta">
+          <span>📍 Удаленно</span>
+          <span>💰 от 55 000 ₽</span>
+          <span>🕒 Полный день</span>
+        </div>
+        <p class="job-description">
+          Помогать покупателям выбирать товары, консультировать по новинкам и классике,
+          участвовать в формировании ассортимента и написании обзоров для блога.
+        </p>
+        <div class="job-requirements">
+          <h4>Что нужно знать и уметь:</h4>
+          <ul>
+            <li>Разбираться во вселенных Marvel, DC, и др.</li>
+            <li>Разбираться в манге</li>
+            <li>Знать основные тайтлы и культовые серии</li>
+            <li>Быть готовым учиться и общаться с людьми</li>
+            <li>Грамотная устная и письменная речь</li>
+          </ul>
+        </div>
+        <button class="apply-btn" onclick="openApplyModal('Консультант')">Откликнуться</button>
+      </div>
+
+      <!-- Вакансия 2 -->
+      <div class="job-card">
+        <div class="job-header">
+          <h3 class="job-title">Специалист по аниме-фигуркам</h3>
+          <span class="job-badge">Новая</span>
+        </div>
+        <div class="job-meta">
+          <span>📍 Удаленно</span>
+          <span>💰 от 55 000 ₽</span>
+          <span>🕒 Полный день</span>
+        </div>
+        <p class="job-description">
+          Консультировать клиентов по фигуркам (Nendoroid, Figma, Scale Figures),
+          помогать с выбором, отслеживать новинки и редкие экземпляры, вести соцсети.
+        </p>
+        <div class="job-requirements">
+          <h4>Что нужно знать и уметь:</h4>
+          <ul>
+            <li>Разбираться в производителях (Good Smile, Kotobukiya и др.)</li>
+            <li>Знать популярные тайтлы и персонажей</li>
+            <li>Понимать масштабы и комплектацию фигурок</li>
+            <li>Английский или японский на уровне чтения</li>
+          </ul>
+        </div>
+        <button class="apply-btn" onclick="openApplyModal('Специалист по аниме-фигуркам')">Откликнуться</button>
+      </div>
+
+      <!-- Вакансия 3 -->
+      <div class="job-card">
+        <div class="job-header">
+          <h3 class="job-title">Менеджер по закупкам</h3>
+        </div>
+        <div class="job-meta">
+          <span>📍 Москва</span>
+          <span>💰 от 70 000 ₽</span>
+          <span>🕒 Полный день</span>
+        </div>
+        <p class="job-description">
+          Поиск новых поставщиков, отслеживание анонсов, заказ товаров,
+          контроль остатков, работа с редкими изданиями и эксклюзивами.
+        </p>
+        <div class="job-requirements">
+          <h4>Что нужно знать и уметь:</h4>
+          <ul>
+            <li>Опыт закупок (не обязательно в нашей сфере)</li>
+            <li>Знание рынка комиксов/фигурок будет плюсом</li>
+            <li>Навыки переговоров и работы с поставщиками</li>
+            <li>Excel и 1С на уровне пользователя</li>
+          </ul>
+        </div>
+        <button class="apply-btn" onclick="openApplyModal('Менеджер по закупкам')">Откликнуться</button>
+      </div>
+
+      <!-- Вакансия 4 -->
+      <div class="job-card">
+        <div class="job-header">
+          <h3 class="job-title">Автор для блога</h3>
+          <span class="job-badge">Стажировка</span>
+        </div>
+        <div class="job-meta">
+          <span>📍 Удаленно</span>
+          <span>💰 от 30 000 ₽</span>
+          <span>🕒 Частичная занятость</span>
+        </div>
+        <p class="job-description">
+          Писать статьи, обзоры и новости о комиксах, манге и фигурках для нашего блога.
+          Можно совмещать с учёбой или основной работой.
+        </p>
+        <div class="job-requirements">
+          <h4>Что нужно знать и уметь:</h4>
+          <ul>
+            <li>Хорошо писать и уметь объяснять сложное простыми словами</li>
+            <li>Разбираться в теме (комиксы, аниме, фигурки)</li>
+            <li>Готовность делать 2-3 статьи в неделю</li>
+            <li>Умение делать фото своих фигурок будет плюсом</li>
+          </ul>
+        </div>
+        <button class="apply-btn" onclick="openApplyModal('Автор для блога')">Откликнуться</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Форма отклика (модальное окно) -->
+  <div class="modal" id="applyModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="applyModalTitle">Отклик на вакансию</h3>
+        <button class="close-btn" id="closeApplyModal">&times;</button>
+      </div>
+      <form class="apply-form" onsubmit="submitApplication(event)">
+        <input type="hidden" id="vacancyInput">
+        <div class="form-group">
+          <label>Ваше имя *</label>
+          <input type="text" id="applicantName" required>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="applicantEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Телефон</label>
+          <input type="tel" id="applicantPhone">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Возраст</label>
+            <input type="number" id="applicantAge">
+          </div>
+          <div class="form-group">
+            <label>Город</label>
+            <input type="text" id="applicantCity">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Почему вы хотите работать у нас? *</label>
+          <textarea id="applicantMessage" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Отправить отклик</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>О компании</h3>
+      <ul>
+        <li><a href="/about.html">О нас</a></li>
+        <li><a href="/jobs.html">Вакансии</a></li>
+        <li><a href="/blog.html">Блог</a></li>
+        <li><a href="/terms.html">Условия использования</a></li>
+        <li><a href="/privacy.html">Политика конфиденциальности</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Помощь</h3>
+      <ul>
+        <li><a href="/delivery.html">Доставка и оплата</a></li>
+        <li><a href="/return.html">Возврат товара</a></li>
+        <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
+        <li><a href="/support.html">Служба поддержки</a></li>
+        <li><a href="/feedback.html">Оставить отзыв</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Контакты</h3>
+      <ul>
+        <li><a href="tel:+7**********">+7 (***) ***-**-**</a></li>
+        <li><a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Мы в соцсетях</h3>
+      <div class="social-links">
+        <a href="#" onclick="openSocialModal('VK')" data-tooltip="VK (скоро)" class="social-link"><img src="/images/vk.png" alt="Vkontakte"></a>
+        <a href="#" onclick="openSocialModal('Telegram')" data-tooltip="Telegram (скоро)" class="social-link"><img src="/images/tg.png" alt="Telegram"></a>
+        <a href="#" onclick="openSocialModal('WhatsApp')" data-tooltip="WhatsApp (скоро)" class="social-link"><img src="/images/what.png" alt="Whatsapp"></a>
+        <a href="#" onclick="openSocialModal('Instagram')" data-tooltip="Instagram (скоро)" class="social-link"><img src="/images/inst.png" alt="Instagram"></a>
+        <a href="#" onclick="openSocialModal('YouTube')" data-tooltip="YouTube (скоро)" class="social-link"><img src="/images/you.png" alt="Youtube"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 MarketDM. Все права защищены.</p>
+  </div>
+</footer>
+
+<!-- Модальное окно для соцсетей -->
+<div class="modal" id="socialModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="socialModalTitle">Скоро появится</h3>
+      <button class="close-btn" id="closeSocialModal">&times;</button>
+    </div>
+    <div style="padding: 2rem;">
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;" id="socialModalMessage">Здесь будет ваш Telegram</p>
+      <button class="submit-btn" id="socialModalBtn">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Функции для модального окна соцсетей ----------
+  const socialModal = document.getElementById('socialModal');
+  const closeSocialModal = document.getElementById('closeSocialModal');
+  const socialModalTitle = document.getElementById('socialModalTitle');
+  const socialModalMessage = document.getElementById('socialModalMessage');
+  const socialModalBtn = document.getElementById('socialModalBtn');
+
+  function openSocialModal(socialName) {
+    socialModalTitle.textContent = 'Скоро появится';
+    socialModalMessage.textContent = `Здесь будет ваш ${socialName}`;
+    socialModal.classList.add('show');
+  }
+
+  function closeSocialModalFn() {
+    socialModal.classList.remove('show');
+  }
+
+  closeSocialModal.addEventListener('click', closeSocialModalFn);
+  socialModalBtn.addEventListener('click', closeSocialModalFn);
+  socialModal.addEventListener('click', (e) => {
+    if (e.target === socialModal) closeSocialModalFn();
+  });
+
+  // ---------- Профиль ----------
+  async function loadUserInfo() {
+    const token = localStorage.getItem('jwt');
+    const userInfoDiv = document.getElementById('userInfo');
+    if (!token) {
+      userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+      return;
+    }
+    try {
+      const response = await fetch('/api/users/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (response.ok) {
+        const user = await response.json();
+        const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
+        let userHtml = '<a href="/cart-icon2.html" class="icon-btn"><img src="/images/cart-icon2.png" alt="Корзина" class="cart-icon2"><span class="icon-label">Корзина</span></a><a href="/profile-icon2.html" class="icon-btn"><img src="/images/profile-icon2.png" alt="Профиль" class="profile-icon2"><span class="icon-label">Профиль</span></a>';
+        if (isAdmin) userHtml += '<span class="admin-badge">ADMIN</span>';
+        userHtml += '<button class="logout-btn" id="logoutBtn">Выйти</button>';
+        userInfoDiv.innerHTML = userHtml;
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          localStorage.removeItem('jwt');
+          window.location.href = '/login.html';
+        });
+      } else {
+        localStorage.removeItem('jwt');
+        userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+      }
+    } catch (err) {
+      console.error('Ошибка загрузки профиля', err);
+      userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+    }
+  }
+
+  // ---------- Поиск ----------
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const query = document.getElementById('searchInput').value.trim();
+    if (query) {
+      window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+    }
+  });
+
+  document.getElementById('searchInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+  });
+
+  // ---------- Функции для отклика на вакансию ----------
+  const applyModal = document.getElementById('applyModal');
+  const closeApplyModal = document.getElementById('closeApplyModal');
+  const applyModalTitle = document.getElementById('applyModalTitle');
+  const vacancyInput = document.getElementById('vacancyInput');
+
+  function openApplyModal(vacancyName) {
+    applyModalTitle.textContent = `Отклик: ${vacancyName}`;
+    vacancyInput.value = vacancyName;
+    applyModal.classList.add('show');
+  }
+
+  function closeApplyModalFn() {
+    applyModal.classList.remove('show');
+  }
+
+  closeApplyModal.addEventListener('click', closeApplyModalFn);
+  applyModal.addEventListener('click', (e) => {
+    if (e.target === applyModal) closeApplyModalFn();
+  });
+
+  function submitApplication(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('applicantName').value;
+    const email = document.getElementById('applicantEmail').value;
+    const vacancy = document.getElementById('vacancyInput').value;
+
+    // Здесь можно отправить данные на сервер
+    console.log('Отклик:', { name, email, vacancy });
+
+    alert(`Спасибо за отклик, ${name}! Мы свяжемся с вами в ближайшее время.`);
+    closeApplyModalFn();
+
+    // Очистить форму
+    event.target.reset();
+  }
+
+  // ---------- Инициализация ----------
+  window.addEventListener('load', () => {
+    loadUserInfo();
+  });
+</script>
+</body>
+</html>

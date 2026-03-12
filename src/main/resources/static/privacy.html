@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MarketDM - Политика конфиденциальности</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            );
+            color: #ffc638;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Шапка */
+        .header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            );
+            padding: 3.5rem 2rem;
+            height: 164px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            color: #ffc638;
+            min-height: 120px;
+            border-bottom: 3px solid #ffb6c1;
+        }
+
+        .header-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header > *:not(.header-video) {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: 200px;
+            flex-wrap: wrap;
+            margin-top: -22px;
+            flex: 1;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            color: #00cdfd;
+            cursor: pointer;
+            margin-left: -180px;
+            margin-right: 7px;
+            order: 2;
+        }
+
+        .logo a {
+            color: #00cdfd;
+            text-decoration: none;
+        }
+
+        .catalog-btn {
+            background: #00cdfd;
+            color: #002951;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            order: 3;
+        }
+
+        .catalog-icon {
+            width: 20px;
+            height: 20px;
+            display: block;
+            transition: all 0.2s ease;
+        }
+
+        .catalog-btn:hover .catalog-icon {
+            filter: brightness(0) invert(1) drop-shadow(0 0 5px #006d81);
+            transform: scale(1.3);
+        }
+
+        .catalog-btn:hover { background: #0fa8cc; }
+
+        .address-picker {
+            display: flex;
+            font-size: 13px;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex: 0 1 auto;
+            max-width: 400px;
+            color: #0dc0e8;
+            font-weight: 500;
+            background: none;
+            padding: 4px 8px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            order: 1;
+            margin-left: 0;
+            margin-top: -115px;
+            margin-right: 10px;
+        }
+
+        .address-picker:hover {
+            background: rgba(0, 205, 253, 0.06);
+            color: #12cdff;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(204, 87, 11, 0);
+            border: 1px solid #d3a42f;
+            border-radius: 20px;
+            padding: 0.3rem 0.3rem 0.3rem 1rem;
+            flex: 2;
+            max-width: 600px;
+            transition: all 0.2s ease;
+            order: 4;
+        }
+
+        .search-box input {
+            border: none;
+            color: #d5a52f;
+            background: transparent;
+            padding: 0.5rem;
+            width: 100%;
+            outline: none;
+            font-size: 1rem;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
+        }
+
+        .search {
+            width: 27px;
+            height: 27px;
+            display: block;
+            margin-right: 4px;
+            transition: filter 0.2s ease;
+        }
+
+        .search-button:hover .search {
+            filter: brightness(2);
+        }
+
+        .search-box:hover {
+            background: rgb(221, 91, 0, 0.2);
+        }
+
+        .search-box input::placeholder {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
+            color: rgba(255, 198, 56, 0.7);
+            font-size: 1rem;
+            opacity: 1;
+        }
+
+        .user-info {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 400;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0px;
+            margin-left: auto;
+        }
+
+        .user-info a {
+            text-decoration: none;
+            color: #cc570b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .cart-icon2, .profile-icon2 {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .profile-icon2 {
+            filter: saturate(120%);
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            gap: 4px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .icon-label {
+            font-size: 0.8rem;
+            color: #d65b0c;
+            line-height: 1.2;
+            text-align: center;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .icon-btn:hover .icon-label {
+            color: #ffc638;
+            text-shadow: 0 0 5px #ffc638;
+        }
+
+        .logout-btn {
+            background: none;
+            color: #ffc638;
+            border: 1px solid #cc570b;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.1rem;
+            margin-top: -1.2rem;
+            font-size: 1rem;
+        }
+
+        .logout-btn:hover { background: rgb(221, 91, 0, 0.2); }
+
+        /* Основной контент страницы */
+        .privacy-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .privacy-header h1 {
+            font-size: 3rem;
+            color: #ffc638;
+            text-shadow: 3px 3px 0 #cc570b;
+            margin-bottom: 1rem;
+        }
+
+        .privacy-header p {
+            font-size: 1.2rem;
+            color: #ffb6c1;
+        }
+
+        /* ОДНА ОБЩАЯ РАМКА ДЛЯ ВСЕГО СОДЕРЖИМОГО */
+        .privacy-content {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid #ffb6c1;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Стили для разделов внутри рамки */
+        .privacy-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .privacy-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .privacy-block h2 {
+            color: #00cdfd;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #ffb6c1;
+            padding-bottom: 0.5rem;
+        }
+
+        .privacy-block h3 {
+            color: #ffc638;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .privacy-block p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .privacy-block ul, .privacy-block ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: #fff;
+        }
+
+        .privacy-block li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .privacy-block strong {
+            color: #ffc638;
+        }
+
+        .privacy-block a {
+            color: #00cdfd;
+            text-decoration: none;
+        }
+
+        .privacy-block a:hover {
+            text-decoration: underline;
+        }
+
+        /* Таблица cookies */
+        .cookies-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .cookies-table th {
+            background: rgba(0, 205, 253, 0.2);
+            color: #ffc638;
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .cookies-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 182, 193, 0.2);
+            color: #fff;
+        }
+
+        .cookies-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cookies-table td:first-child {
+            font-weight: bold;
+            color: #00cdfd;
+        }
+
+        /* Примечание внутри рамки */
+        .privacy-note {
+            background: rgba(255, 182, 193, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ffc638;
+            margin-top: 2rem;
+        }
+
+        .privacy-note p {
+            margin-bottom: 0;
+            color: #fff;
+        }
+
+        .last-updated {
+            text-align: right;
+            color: #ffb6c1;
+            font-style: italic;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 182, 193, 0.3);
+            padding-top: 1.5rem;
+        }
+
+        /* Футер */
+        .footer {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-weight: 500;
+            background: linear-gradient(to right,
+            #00071c 0%,
+            #00071c 20%,
+            #2e080e 35%,
+            #520c08 55%,
+            #5a0a00 75%,
+            #5a0a00 90%,
+            #5a0a00 100%
+            );
+            color: #ffc638;
+            border-top: 3px solid #ffb6c1;
+            margin-top: 3rem;
+            padding: 2rem 0 0;
+            font-size: 0.95rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .footer-column h3 {
+            color: #ffb6c1;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: #ffb6c1;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-column a {
+            color: #ffc638;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: #ffb6c1;
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 198, 56, 0.1);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .social-link:hover {
+            background: #ffc638;
+            color: #010a18 !important;
+            transform: translateY(-3px);
+        }
+
+        .social-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #ffc638;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            border: 1px solid #ffb6c1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .social-link:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: 140%;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+            visibility: visible;
+            bottom: 130%;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 2rem 2rem;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 182, 193, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .footer-column:first-child,
+        .footer-column:first-child a,
+        .footer-column:first-child li {
+            color: #00cdfd;
+        }
+
+        .footer-column:first-child a {
+            color: #00cdfd;
+        }
+
+        .footer-column:first-child a:hover {
+            color: #ffb6c1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-btn:hover { color: #333; }
+
+        .continue-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: auto;
+        }
+
+        .continue-btn:hover { background: #45a049; }
+
+        @media (max-width: 768px) {
+            .privacy-content {
+                padding: 1.5rem;
+            }
+
+            .cookies-table {
+                font-size: 0.9rem;
+            }
+
+            .cookies-table th,
+            .cookies-table td {
+                padding: 0.8rem;
+            }
+
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <video class="header-video" autoplay muted loop playsinline>
+        <source src="/video/tvsd2header5.mp4" type="video/mp4">
+    </video>
+
+    <div class="header-left-group">
+        <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+
+        <button class="catalog-btn" id="catalogBtn" onclick="window.location.href='/'">
+            <img src="/images/catalog-icon1.png" alt="Каталог" class="catalog-icon">
+            <span>Каталог</span>
+        </button>
+
+        <div class="address-picker" id="addressPicker">
+            <span id="currentAddress">Адрес доставки</span>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
+            <div class="search-button" id="searchBtn">
+                <img src="/images/search.png" alt="Поиск" class="search">
+            </div>
+        </div>
+    </div>
+
+    <div class="user-info" id="userInfo"></div>
+</header>
+
+<main class="privacy-container">
+    <div class="privacy-header">
+        <h1>Политика конфиденциальности</h1>
+        <p>Как мы собираем, используем и защищаем ваши данные</p>
+    </div>
+
+    <!-- ОДНА ОБЩАЯ РАМКА -->
+    <div class="privacy-content">
+
+        <!-- Раздел 1 -->
+        <div class="privacy-block">
+            <h2>1. Введение</h2>
+            <p>1.1. Настоящая Политика конфиденциальности (далее — «Политика») определяет порядок обработки и защиты персональных данных пользователей сайта <a href="/">https://marketdm.ru</a> (далее — «Сайт»).</p>
+            <p>1.2. Используя Сайт, вы даете согласие на сбор и обработку ваших персональных данных в соответствии с настоящей Политикой. Если вы не согласны с условиями Политики, пожалуйста, прекратите использование Сайта.</p>
+            <p>1.3. Мы серьезно относимся к защите ваших данных и соблюдаем требования Федерального закона № 152-ФЗ «О персональных данных».</p>
+        </div>
+
+        <!-- Раздел 2 -->
+        <div class="privacy-block">
+            <h2>2. Какие данные мы собираем</h2>
+            <p>2.1. Данные, которые вы предоставляете добровольно:</p>
+            <ul>
+                <li>Имя, фамилия, отчество</li>
+                <li>Адрес электронной почты</li>
+                <li>Номер телефона</li>
+                <li>Адрес доставки</li>
+                <li>Пароль (хранится в зашифрованном виде)</li>
+                <li>История заказов и избранное</li>
+            </ul>
+            <p>2.2. Данные, собираемые автоматически:</p>
+            <ul>
+                <li>IP-адрес</li>
+                <li>Тип браузера и устройства</li>
+                <li>Файлы cookies</li>
+                <li>Страницы, которые вы посещаете на Сайте</li>
+                <li>Время и дата посещения</li>
+                <li>Referer (с какого сайта вы пришли)</li>
+            </ul>
+            <p>2.3. Особые категории данных</p>
+            <ul>
+                <li>2.3.1. Мы не собираем специальные категории персональных данных, касающиеся расовой, национальной принадлежности, политических взглядов, религиозных или философских убеждений, состояния здоровья, интимной жизни.</li>
+                <li>2.3.2. Мы не обрабатываем биометрические персональные данные (сведения, которые характеризуют физиологические и биологические особенности человека).</li>
+            </ul>
+        </div>
+
+        <!-- Раздел 3 -->
+        <div class="privacy-block">
+            <h2>3. Как мы используем ваши данные</h2>
+            <p>3.1. Ваши данные используются для:</p>
+            <ul>
+                <li>Оформления и выполнения заказов</li>
+                <li>Связи с вами по вопросам заказов</li>
+                <li>Отправки уведомлений о статусе заказа</li>
+                <li>Персонализации вашего опыта на Сайте</li>
+                <li>Улучшения работы Сайта и наших услуг</li>
+                <li>Предотвращения мошенничества и обеспечения безопасности</li>
+                <li>Отправки информационных рассылок (с вашего согласия)</li>
+            </ul>
+        </div>
+
+        <!-- Раздел 4 -->
+        <div class="privacy-block">
+            <h2>4. Файлы cookies</h2>
+            <p>4.1. Мы используем файлы cookies для улучшения работы Сайта и анализа пользовательского поведения.</p>
+
+            <table class="cookies-table">
+                <thead>
+                <tr>
+                    <th>Тип cookie</th>
+                    <th>Цель использования</th>
+                    <th>Срок хранения</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Необходимые</td>
+                    <td>Обеспечивают работу корзины, авторизации и других основных функций</td>
+                    <td>Сессия / 1 год</td>
+                </tr>
+                <tr>
+                    <td>Аналитические</td>
+                    <td>Сбор статистики посещаемости (Яндекс.Метрика)</td>
+                    <td>До 2 лет</td>
+                </tr>
+                <tr>
+                    <td>Функциональные</td>
+                    <td>Запоминают ваши предпочтения (адрес, язык)</td>
+                    <td>До 1 года</td>
+                </tr>
+                <tr>
+                    <td>Рекламные</td>
+                    <td>Показ релевантной рекламы</td>
+                    <td>До 1 года</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p>4.2. Вы можете отключить cookies в настройках браузера, но это может повлиять на работу некоторых функций Сайта.</p>
+        </div>
+
+        <!-- Раздел 5 -->
+        <div class="privacy-block">
+            <h2>5. Передача данных третьим лицам</h2>
+            <p>5.1. Мы передаем ваши данные третьим лицам только в следующих случаях:</p>
+            <ul>
+                <li>Службы доставки: для выполнения заказов (имя, адрес, телефон)</li>
+                <li>Платежные системы: для обработки платежей (данные платежа)</li>
+                <li>Почтовые сервисы: для отправки уведомлений (email)</li>
+                <li>По требованию закона: в случаях, предусмотренных законодательством РФ</li>
+            </ul>
+            <p>5.2. Мы не продаем ваши персональные данные третьим лицам.</p>
+            <p>5.3. Трансграничная передача данных</p>
+            <ul>
+                <li>5.3.1. Мы не осуществляем трансграничную передачу персональных данных. Все данные хранятся на серверах, расположенных на территории Российской Федерации.</li>
+                <li>5.3.2. В случае необходимости трансграничной передачи (например, для доставки редких фигурок из Японии), мы уведомим вас отдельно и запросим согласие.</li>
+            </ul>
+        </div>
+
+        <!-- Раздел 6 -->
+        <div class="privacy-block">
+            <h2>6. Защита данных</h2>
+            <p>6.1. Мы используем современные меры безопасности для защиты ваших данных:</p>
+            <ul>
+                <li>SSL-шифрование на всех страницах</li>
+                <li>Защита баз данных от несанкционированного доступа</li>
+                <li>Регулярное обновление систем безопасности</li>
+                <li>Ограниченный доступ сотрудников к данным</li>
+            </ul>
+        </div>
+
+        <!-- Раздел 7 -->
+        <div class="privacy-block">
+            <h2>7. Ваши права</h2>
+            <p>7.1. Вы имеете право:</p>
+            <ul>
+                <li>Получить информацию о том, какие данные мы храним</li>
+                <li>Требовать исправления неточных данных</li>
+                <li>Требовать удаления ваших данных (право на забвение)</li>
+                <li>Отозвать согласие на обработку данных</li>
+            </ul>
+            <p>7.2. Для реализации своих прав напишите нам на <a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></p>
+            <p>7.3. Согласие на рекламные рассылки</p>
+            <ul>
+                <li>7.3.1. Мы отправляем информационные и рекламные сообщения только с вашего отдельного согласия.</li>
+                <li>7.3.2. Вы можете в любой момент отказаться от получения рассылок, нажав ссылку «Отписаться» в письме или написав нам на почту.</li>
+                <li>7.3.3. Мы не передаем ваш email третьим лицам для их рассылок.</li>
+            </ul>
+        </div>
+
+        <!-- Раздел 8 -->
+        <div class="privacy-block">
+            <h2>8. Хранение данных</h2>
+            <p>8.1. Мы храним ваши данные в течение срока, необходимого для выполнения заказов и соблюдения законодательства:</p>
+            <ul>
+                <li>Данные учетной записи — до удаления аккаунта</li>
+                <li>История заказов — 3 года (для налоговой отчетности)</li>
+                <li>Данные обращений в поддержку — 1 год</li>
+            </ul>
+        </div>
+
+        <!-- Раздел 9 -->
+        <div class="privacy-block">
+            <h2>9. Изменения в Политике</h2>
+            <p>9.1. Мы можем обновлять Политику конфиденциальности время от времени. Новая версия вступает в силу с момента публикации на Сайте.</p>
+            <p>9.2. Рекомендуем периодически проверять эту страницу на предмет изменений.</p>
+        </div>
+
+        <!-- Раздел 10 -->
+        <div class="privacy-block">
+            <h2>10. Контакты</h2>
+            <p>Если у вас есть вопросы о Политике конфиденциальности или обработке ваших данных, пожалуйста, свяжитесь с нами:</p>
+            <p>Email: <a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></p>
+            <p>Телефон: +7 (***) ***-**-**</p>
+            <p>Адрес: г. Москва, ул. Тверская, д. 7 (офис MarketDM)</p>
+        </div>
+
+        <!-- Раздел 11 -->
+        <div class="privacy-block">
+            <h2>11. Данные несовершеннолетних</h2>
+            <p>11.1. Наш магазин ориентирован на широкую аудиторию, включая лиц старше 16 лет. Некоторые товары (комиксы 18+, фигурки с возрастными ограничениями) предназначены только для совершеннолетних.</p>
+            <p>11.2. Если вы несовершеннолетний, вы можете использовать сайт только с согласия родителей или законных представителей.</p>
+            <p>11.3. Мы не собираем данные детей младше 14 лет без согласия родителей. Если мы обнаружим, что получили данные ребенка без согласия, мы немедленно удалим их.</p>
+        </div>
+
+        <!-- Раздел 12 -->
+        <div class="privacy-block">
+            <h2>12. Автоматизированное принятие решений</h2>
+            <p>12.1. Мы не используем автоматизированную обработку персональных данных для принятия решений, влекущих юридические последствия (например, автоматический отказ в заказе без участия сотрудника).</p>
+            <p>12.2. Рекомендации товаров и персонализация сайта осуществляются автоматически на основе ваших предпочтений, но окончательное решение всегда за вами.</p>
+        </div>
+
+        <!-- Раздел 13 -->
+        <div class="privacy-block">
+            <h2>13. Порядок получения согласия</h2>
+            <p>13.1. Согласие на обработку персональных данных считается полученным:</p>
+            <ul>
+                <li>При регистрации на сайте (проставление галочки «Я согласен с Политикой конфиденциальности»)</li>
+                <li>При оформлении заказа (подтверждение согласия)</li>
+                <li>При заполнении форм обратной связи</li>
+                <li>При подписке на рассылку</li>
+            </ul>
+            <p>13.2. Вы можете отозвать согласие в любой момент, направив уведомление на <a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a>. Отзыв согласия не влияет на законность обработки до момента отзыва.</p>
+        </div>
+
+        <!-- Примечание внутри рамки -->
+        <div class="privacy-note">
+            <p>🔒 Нажимая «Зарегистрироваться» или оформляя заказ, вы подтверждаете, что ознакомлены с Политикой конфиденциальности и согласны на обработку ваших персональных данных.</p>
+        </div>
+
+        <!-- Дата обновления внутри рамки -->
+        <div class="last-updated">
+            Последнее обновление: 12 марта 2026 года
+        </div>
+
+    </div> <!-- Закрытие privacy-content -->
+</main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>О компании</h3>
+            <ul>
+                <li><a href="/about.html">О нас</a></li>
+                <li><a href="/jobs.html">Вакансии</a></li>
+                <li><a href="/blog.html">Блог</a></li>
+                <li><a href="/terms.html">Условия использования</a></li>
+                <li><a href="/privacy.html">Политика конфиденциальности</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Помощь</h3>
+            <ul>
+                <li><a href="/delivery.html">Доставка и оплата</a></li>
+                <li><a href="/return.html">Возврат товара</a></li>
+                <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
+                <li><a href="/support.html">Служба поддержки</a></li>
+                <li><a href="/feedback.html">Оставить отзыв</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Контакты</h3>
+            <ul>
+                <li><a href="tel:+7**********">+7 (***) ***-**-**</a></li>
+                <li><a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Мы в соцсетях</h3>
+            <div class="social-links">
+                <a href="#" onclick="openSocialModal('VK')" data-tooltip="VK (скоро)" class="social-link"><img src="/images/vk.png" alt="Vkontakte"></a>
+                <a href="#" onclick="openSocialModal('Telegram')" data-tooltip="Telegram (скоро)" class="social-link"><img src="/images/tg.png" alt="Telegram"></a>
+                <a href="#" onclick="openSocialModal('WhatsApp')" data-tooltip="WhatsApp (скоро)" class="social-link"><img src="/images/what.png" alt="Whatsapp"></a>
+                <a href="#" onclick="openSocialModal('Instagram')" data-tooltip="Instagram (скоро)" class="social-link"><img src="/images/inst.png" alt="Instagram"></a>
+                <a href="#" onclick="openSocialModal('YouTube')" data-tooltip="YouTube (скоро)" class="social-link"><img src="/images/you.png" alt="Youtube"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 MarketDM. Все права защищены.</p>
+    </div>
+</footer>
+
+<!-- Модальное окно для соцсетей -->
+<div class="modal" id="socialModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="socialModalTitle">Скоро появится</h3>
+            <button class="close-btn" id="closeSocialModal">&times;</button>
+        </div>
+        <div style="padding: 2rem;">
+            <p style="font-size: 1.2rem; margin-bottom: 1.5rem;" id="socialModalMessage">Здесь будет ваш Telegram</p>
+            <button class="continue-btn" id="socialModalBtn">Понятно</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- Функции для модального окна соцсетей ----------
+    const socialModal = document.getElementById('socialModal');
+    const closeSocialModal = document.getElementById('closeSocialModal');
+    const socialModalTitle = document.getElementById('socialModalTitle');
+    const socialModalMessage = document.getElementById('socialModalMessage');
+    const socialModalBtn = document.getElementById('socialModalBtn');
+
+    function openSocialModal(socialName) {
+        socialModalTitle.textContent = 'Скоро появится';
+        socialModalMessage.textContent = `Здесь будет ваш ${socialName}`;
+        socialModal.classList.add('show');
+    }
+
+    function closeSocialModalFn() {
+        socialModal.classList.remove('show');
+    }
+
+    closeSocialModal.addEventListener('click', closeSocialModalFn);
+    socialModalBtn.addEventListener('click', closeSocialModalFn);
+    socialModal.addEventListener('click', (e) => {
+        if (e.target === socialModal) closeSocialModalFn();
+    });
+
+    // ---------- Профиль ----------
+    async function loadUserInfo() {
+        const token = localStorage.getItem('jwt');
+        const userInfoDiv = document.getElementById('userInfo');
+        if (!token) {
+            userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+            return;
+        }
+        try {
+            const response = await fetch('/api/users/profile', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (response.ok) {
+                const user = await response.json();
+                const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
+                let userHtml = '<a href="/cart-icon2.html" class="icon-btn"><img src="/images/cart-icon2.png" alt="Корзина" class="cart-icon2"><span class="icon-label">Корзина</span></a><a href="/profile-icon2.html" class="icon-btn"><img src="/images/profile-icon2.png" alt="Профиль" class="profile-icon2"><span class="icon-label">Профиль</span></a>';
+                if (isAdmin) userHtml += '<span class="admin-badge">ADMIN</span>';
+                userHtml += '<button class="logout-btn" id="logoutBtn">Выйти</button>';
+                userInfoDiv.innerHTML = userHtml;
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    localStorage.removeItem('jwt');
+                    window.location.href = '/login.html';
+                });
+            } else {
+                localStorage.removeItem('jwt');
+                userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+            }
+        } catch (err) {
+            console.error('Ошибка загрузки профиля', err);
+            userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+        }
+    }
+
+    // ---------- Поиск ----------
+    document.getElementById('searchBtn').addEventListener('click', () => {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query) {
+            window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+        }
+    });
+
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('searchBtn').click();
+    });
+
+    // ---------- Инициализация ----------
+    window.addEventListener('load', () => {
+        loadUserInfo();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>MarketDM - Условия использования</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      color: #ffc638;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Шапка */
+    .header {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      padding: 3.5rem 2rem;
+      height: 164px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      color: #ffc638;
+      min-height: 120px;
+      border-bottom: 3px solid #ffb6c1;
+    }
+
+    .header-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .header > *:not(.header-video) {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-left-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-left: 200px;
+      flex-wrap: wrap;
+      margin-top: -22px;
+      flex: 1;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 2.8rem;
+      color: #00cdfd;
+      cursor: pointer;
+      margin-left: -180px;
+      margin-right: 7px;
+      order: 2;
+    }
+
+    .logo a {
+      color: #00cdfd;
+      text-decoration: none;
+    }
+
+    .catalog-btn {
+      background: #00cdfd;
+      color: #002951;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      order: 3;
+    }
+
+    .catalog-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .catalog-btn:hover .catalog-icon {
+      filter: brightness(0) invert(1) drop-shadow(0 0 5px #006d81);
+      transform: scale(1.3);
+    }
+
+    .catalog-btn:hover { background: #0fa8cc; }
+
+    .address-picker {
+      display: flex;
+      font-size: 13px;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex: 0 1 auto;
+      max-width: 400px;
+      color: #0dc0e8;
+      font-weight: 500;
+      background: none;
+      padding: 4px 8px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      order: 1;
+      margin-left: 0;
+      margin-top: -115px;
+      margin-right: 10px;
+    }
+
+    .address-picker:hover {
+      background: rgba(0, 205, 253, 0.06);
+      color: #12cdff;
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: rgba(204, 87, 11, 0);
+      border: 1px solid #d3a42f;
+      border-radius: 20px;
+      padding: 0.3rem 0.3rem 0.3rem 1rem;
+      flex: 2;
+      max-width: 600px;
+      transition: all 0.2s ease;
+      order: 4;
+    }
+
+    .search-box input {
+      border: none;
+      color: #d5a52f;
+      background: transparent;
+      padding: 0.5rem;
+      width: 100%;
+      outline: none;
+      font-size: 1rem;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+    }
+
+    .search {
+      width: 27px;
+      height: 27px;
+      display: block;
+      margin-right: 4px;
+      transition: filter 0.2s ease;
+    }
+
+    .search-button:hover .search {
+      filter: brightness(2);
+    }
+
+    .search-box:hover {
+      background: rgb(221, 91, 0, 0.2);
+    }
+
+    .search-box input::placeholder {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      color: rgba(255, 198, 56, 0.7);
+      font-size: 1rem;
+      opacity: 1;
+    }
+
+    .user-info {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 400;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 0px;
+      margin-left: auto;
+    }
+
+    .user-info a {
+      text-decoration: none;
+      color: #cc570b;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .cart-icon2, .profile-icon2 {
+      width: 50px;
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .profile-icon2 {
+      filter: saturate(120%);
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #333;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      gap: 4px;
+      position: relative;
+      z-index: 20;
+    }
+
+    .icon-label {
+      font-size: 0.8rem;
+      color: #d65b0c;
+      line-height: 1.2;
+      text-align: center;
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .icon-btn:hover .icon-label {
+      color: #ffc638;
+      text-shadow: 0 0 5px #ffc638;
+    }
+
+    .logout-btn {
+      background: none;
+      color: #ffc638;
+      border: 1px solid #cc570b;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 0.1rem;
+      margin-top: -1.2rem;
+      font-size: 1rem;
+    }
+
+    .logout-btn:hover { background: rgb(221, 91, 0, 0.2); }
+
+    /* Основной контент страницы */
+    .terms-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      flex: 1;
+    }
+
+    .terms-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .terms-header h1 {
+      font-size: 3rem;
+      color: #ffc638;
+      text-shadow: 3px 3px 0 #cc570b;
+      margin-bottom: 1rem;
+    }
+
+    .terms-header p {
+      font-size: 1.2rem;
+      color: #ffb6c1;
+    }
+
+    /* ОДНА ОБЩАЯ РАМКА */
+    .terms-content {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 2.5rem;
+      border: 2px solid #ffb6c1;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Стили для разделов внутри рамки */
+    .terms-block {
+      margin-bottom: 2.5rem;
+    }
+
+    .terms-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .terms-block h2 {
+      color: #00cdfd;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #ffb6c1;
+      padding-bottom: 0.5rem;
+    }
+
+    .terms-block h3 {
+      color: #ffc638;
+      font-size: 1.5rem;
+      margin: 1.5rem 0 1rem;
+    }
+
+    .terms-block p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .terms-block ul, .terms-block ol {
+      margin: 1rem 0 1.5rem 2rem;
+      color: #fff;
+    }
+
+    .terms-block li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .terms-block strong {
+      color: #ffc638;
+    }
+
+    .terms-block a {
+      color: #00cdfd;
+      text-decoration: none;
+    }
+
+    .terms-block a:hover {
+      text-decoration: underline;
+    }
+
+    .terms-note {
+      background: rgba(255, 182, 193, 0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      border-left: 4px solid #ffc638;
+      margin-top: 2rem;
+    }
+
+    .terms-note p {
+      margin-bottom: 0;
+      color: #fff;
+    }
+
+    .last-updated {
+      text-align: right;
+      color: #ffb6c1;
+      font-style: italic;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255, 182, 193, 0.3);
+      padding-top: 1.5rem;
+    }
+
+    /* Футер */
+    .footer {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight: 500;
+      background: linear-gradient(to right,
+      #00071c 0%,
+      #00071c 20%,
+      #2e080e 35%,
+      #520c08 55%,
+      #5a0a00 75%,
+      #5a0a00 90%,
+      #5a0a00 100%
+      );
+      color: #ffc638;
+      border-top: 3px solid #ffb6c1;
+      margin-top: 3rem;
+      padding: 2rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 0 2rem;
+    }
+
+    .footer-column h3 {
+      color: #ffb6c1;
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 2px;
+      background: #ffb6c1;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.7rem;
+    }
+
+    .footer-column a {
+      color: #ffc638;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-column a:hover {
+      color: #ffb6c1;
+      text-decoration: underline;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-links img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 198, 56, 0.1);
+      border-radius: 50%;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .social-link:hover {
+      background: #ffc638;
+      color: #010a18 !important;
+      transform: translateY(-3px);
+    }
+
+    .social-link::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #ffc638;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border: 1px solid #ffb6c1;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .social-link:hover::after {
+      opacity: 1;
+      visibility: visible;
+      bottom: 140%;
+    }
+
+    .social-link::before {
+      content: '';
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 8px solid transparent;
+      border-top-color: #000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .social-link:hover::before {
+      opacity: 1;
+      visibility: visible;
+      bottom: 130%;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 2rem 2rem;
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid rgba(255, 182, 193, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .footer-column:first-child,
+    .footer-column:first-child a,
+    .footer-column:first-child li {
+      color: #00cdfd;
+    }
+
+    .footer-column:first-child a {
+      color: #00cdfd;
+    }
+
+    .footer-column:first-child a:hover {
+      color: #ffb6c1;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+      text-align: center;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 0.5rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close-btn:hover { color: #333; }
+
+    .continue-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .continue-btn:hover { background: #45a049; }
+
+    @media (max-width: 768px) {
+      .terms-content {
+        padding: 1.5rem;
+      }
+
+      .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <video class="header-video" autoplay muted loop playsinline>
+    <source src="/video/tvsd2header5.mp4" type="video/mp4">
+  </video>
+
+  <div class="header-left-group">
+    <div class="logo" onclick="window.location.href='/'">MarketDM</div>
+
+    <button class="catalog-btn" id="catalogBtn" onclick="window.location.href='/'">
+      <img src="/images/catalog-icon1.png" alt="Каталог" class="catalog-icon">
+      <span>Каталог</span>
+    </button>
+
+    <div class="address-picker" id="addressPicker">
+      <span id="currentAddress">Адрес доставки</span>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
+      <div class="search-button" id="searchBtn">
+        <img src="/images/search.png" alt="Поиск" class="search">
+      </div>
+    </div>
+  </div>
+
+  <div class="user-info" id="userInfo"></div>
+</header>
+
+<main class="terms-container">
+  <div class="terms-header">
+    <h1>Условия использования</h1>
+    <p>Правила и условия пользования сайтом MarketDM</p>
+  </div>
+
+  <!-- ОДНА ОБЩАЯ РАМКА -->
+  <div class="terms-content">
+
+    <!-- Раздел 1 -->
+    <div class="terms-block">
+      <h2>1. Общие положения</h2>
+      <p>1.1. Настоящие Условия использования (далее — «Условия») регулируют отношения между интернет-магазином MarketDM (далее — «Магазин», «Мы») и пользователем (далее — «Пользователь», «Вы») при использовании сайта <a href="/">https://marketdm.ru</a> и его сервисов.</p>
+      <p>1.2. Используя сайт, Вы подтверждаете свое согласие с данными Условиями. Если Вы не согласны с какими-либо положениями, Вы обязаны прекратить использование сайта.</p>
+      <p>1.3. Магазин оставляет за собой право вносить изменения в Условия в любое время без уведомления Пользователя. Новая версия Условий вступает в силу с момента ее публикации на сайте.</p>
+    </div>
+
+    <!-- Раздел 2 -->
+    <div class="terms-block">
+      <h2>2. Регистрация и учетная запись</h2>
+      <p>2.1. Для оформления заказов и доступа к некоторым функциям сайта требуется регистрация.</p>
+      <p>2.2. При регистрации Вы обязуетесь предоставлять достоверную и актуальную информацию. Вы несете ответственность за сохранность своих учетных данных и за все действия, совершенные под Вашей учетной записью.</p>
+      <p>2.3. Магазин имеет право заблокировать или удалить учетную запись Пользователя в случае нарушения Условий или законодательства РФ.</p>
+    </div>
+
+    <!-- Раздел 3 -->
+    <div class="terms-block">
+      <h2>3. Товары и цены</h2>
+      <p>3.1. Внешний вид, комплектация и характеристики товаров могут отличаться от изображений на сайте. Актуальная информация предоставляется по запросу.</p>
+      <p>3.2. Цены на сайте указаны в рублях РФ и могут быть изменены без предварительного уведомления. Окончательная цена фиксируется при оформлении заказа.</p>
+      <p>3.3. Магазин прилагает все усилия для точного отображения информации, однако не гарантирует отсутствие технических ошибок. В случае обнаружения ошибки в цене или описании товара, Магазин уведомит Пользователя и предложит оформить заказ по корректной цене или аннулировать его.</p>
+      <p>3.4. Предзаказы и редкие товары</p>
+      <p>3.4.1. Некоторые товары (новинки, эксклюзивные фигурки, лимитированные издания) могут продаваться в режиме предзаказа.</p>
+      <p>3.4.2. Сроки поступления предзаказов являются оценочными и могут меняться из-за задержек производителя или поставщика. Мы уведомим вас об изменении сроков.</p>
+      <p>3.4.3. В случае отмены предзаказа производителем (например, закрытие линейки), мы вернем вам полную стоимость.</p>
+      <p>3.4.4. Количество редких товаров ограничено. В случае, если два заказа поступили одновременно, а товар остался в единственном экземпляре, приоритет отдается заказу, оплаченному первым.</p>
+      <p>3.5. Цифровые товары</p>
+      <p>3.5.1. Цифровые товары (электронные комиксы, арты, подарочные сертификаты) не подлежат возврату или обмену после получения доступа к ним.</p>
+      <p>3.5.2. Доставка цифровых товаров осуществляется на указанный email в течение 24 часов после оплаты.</p>
+    </div>
+
+    <!-- Раздел 4 -->
+    <div class="terms-block">
+      <h2>4. Оформление и оплата заказа</h2>
+      <p>4.1. Заказ считается оформленным после подтверждения Пользователем и получения автоматического уведомления на электронную почту.</p>
+      <p>4.2. Способы оплаты указаны на сайте в разделе «Доставка и оплата».</p>
+      <p>4.3. Магазин имеет право отказать в выполнении заказа без объяснения причин, уведомив Пользователя.</p>
+      <p>4.4. Бонусная программа и скидки</p>
+      <p>4.4.1. Мы можем проводить акции и начислять бонусы за покупки. Правила каждой акции публикуются отдельно.</p>
+      <p>4.4.2. Бонусы не являются валютой и не могут быть обналичены или переданы другому лицу.</p>
+      <p>4.4.3. Мы оставляем за собой право изменять условия бонусной программы, отменять или изменять количество начисленных бонусов в случае технических ошибок или мошеннических действий.</p>
+    </div>
+
+    <!-- Раздел 5 -->
+    <div class="terms-block">
+      <h2>5. Доставка</h2>
+      <p>5.1. Доставка осуществляется способами, указанными на сайте, по адресу, указанному Пользователем.</p>
+      <p>5.2. Сроки доставки являются приблизительными и зависят от службы доставки и региона. Магазин не несет ответственности за задержки, вызванные действиями транспортных компаний или почтовых служб.</p>
+      <p>5.3. Риск случайной гибели или повреждения товара переходит к Пользователю с момента передачи товара Пользователю или уполномоченному лицу.</p>
+    </div>
+
+    <!-- Раздел 6 -->
+    <div class="terms-block">
+      <h2>6. Возврат и обмен товаров</h2>
+      <p>6.1. Возврат и обмен товаров производится в соответствии с Законом РФ «О защите прав потребителей» и правилами, указанными в разделе «Возврат товара».</p>
+      <p>6.2. Для возврата товара надлежащего качества необходимо сохранить товарный вид, упаковку и документы, подтверждающие покупку.</p>
+      <p>6.3. Возврат денежных средств производится тем же способом, которым была произведена оплата, в течение 10 рабочих дней после получения и проверки возвращенного товара.</p>
+      <p>6.4. Особенности возврата коллекционных товаров</p>
+      <p>6.4.1. Коллекционные фигурки и редкие издания считаются товарами надлежащего качества, если вскрыта заводская упаковка (блистер, слюда, запайка).</p>
+      <p>6.4.2. Возврат коллекционных товаров надлежащего качества возможен только в невскрытой заводской упаковке с сохранением всех пломб и стикеров.</p>
+      <p>6.4.3. При обнаружении брака (сколы, дефекты окраски, отсутствие деталей) просим фотографировать вскрытие на видео для ускорения процесса возврата.</p>
+      <p>6.4.4. Некоторые коллекционные товары (эксклюзивы, аукционные лоты) могут продаваться по правилам "как есть" (as is) с явным указанием этого в карточке товара. Такие товары возврату не подлежат, кроме случаев брака.</p>
+    </div>
+
+    <!-- Раздел 7 -->
+    <div class="terms-block">
+      <h2>7. Интеллектуальная собственность</h2>
+      <p>7.1. Все материалы, размещенные на сайте (тексты, изображения, дизайн, логотипы), являются объектами интеллектуальной собственности и охраняются законодательством РФ.</p>
+      <p>7.2. Любое использование материалов сайта без письменного разрешения Магазина запрещено.</p>
+      <p>7.3. Контент пользователей</p>
+      <p>7.3.1. Оставляя отзывы, комментарии или загружая фото на сайт, вы гарантируете, что имеете права на этот контент.</p>
+      <p>7.3.2. Загружая фото своих коллекций, вы соглашаетесь, что мы можем использовать их в соцсетях для демонстрации (с указанием авторства).</p>
+      <p>7.3.3. Запрещено размещать контент, нарушающий законодательство РФ или права третьих лиц, а также содержащий нецензурную лексику, оскорбления или пропаганду.</p>
+      <p>7.3.4. Мы оставляем за собой право удалять любой контент без объяснения причин.</p>
+    </div>
+
+    <!-- Раздел 8 -->
+    <div class="terms-block">
+      <h2>8. Ответственность</h2>
+      <p>8.1. Магазин не несет ответственности за любой ущерб, прямой или косвенный, возникший в результате использования или невозможности использования сайта.</p>
+      <p>8.2. Магазин не отвечает за содержание и работу сторонних сайтов, на которые могут вести ссылки.</p>
+      <p>8.3. Максимальная ответственность Магазина ограничивается стоимостью заказа, по которому возник спор.</p>
+    </div>
+
+    <!-- Раздел 9 -->
+    <div class="terms-block">
+      <h2>9. Возрастные ограничения</h2>
+      <p>9.1. Некоторые товары (комиксы с маркировкой 18+, фигурки с откровенным дизайном) имеют возрастные ограничения.</p>
+      <p>9.2. Заказывая такие товары, вы подтверждаете, что вам исполнилось 18 лет.</p>
+      <p>9.3. Мы не проверяем возраст при доставке, но ответственность за соблюдение законодательства лежит на покупателе.</p>
+    </div>
+
+    <!-- Раздел 10 -->
+    <div class="terms-block">
+      <h2>10. Досудебное урегулирование</h2>
+      <p>10.1. Все споры решаются путем переговоров. Срок ответа на претензию — 10 рабочих дней.</p>
+      <p>10.2. Претензии направляются на email <a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a> с пометкой "Претензия" или почтой по адресу: г. Москва, ул. Тверская, д. 7, офис MarketDM.</p>
+      <p>10.3. В претензии обязательно указывайте номер заказа, описание проблемы и контактные данные для обратной связи.</p>
+    </div>
+
+    <!-- Раздел 11 -->
+    <div class="terms-block">
+      <h2>11. Заключительные положения</h2>
+      <p>11.1. Настоящие Условия регулируются законодательством Российской Федерации.</p>
+      <p>11.2. Все споры решаются путем переговоров. При невозможности достижения согласия спор подлежит рассмотрению в суде по месту нахождения Магазина в соответствии с законодательством РФ.</p>
+      <p>11.3. Если какое-либо положение Условий признается недействительным, это не влияет на действительность остальных положений.</p>
+    </div>
+
+    <!-- Примечание -->
+    <div class="terms-note">
+      <p>🌟 Используя наш сайт, вы соглашаетесь с данными Условиями. Если у вас возникли вопросы, пожалуйста, свяжитесь с нами: <a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></p>
+    </div>
+
+    <!-- Дата обновления -->
+    <div class="last-updated">
+      Последнее обновление: 12 марта 2026 года
+    </div>
+
+  </div> <!-- Закрытие terms-content -->
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>О компании</h3>
+      <ul>
+        <li><a href="/about.html">О нас</a></li>
+        <li><a href="/jobs.html">Вакансии</a></li>
+        <li><a href="/blog.html">Блог</a></li>
+        <li><a href="/terms.html">Условия использования</a></li>
+        <li><a href="/privacy.html">Политика конфиденциальности</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Помощь</h3>
+      <ul>
+        <li><a href="/delivery.html">Доставка и оплата</a></li>
+        <li><a href="/return.html">Возврат товара</a></li>
+        <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
+        <li><a href="/support.html">Служба поддержки</a></li>
+        <li><a href="/feedback.html">Оставить отзыв</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Контакты</h3>
+      <ul>
+        <li><a href="tel:+7**********">+7 (***) ***-**-**</a></li>
+        <li><a href="mailto:MarketDM@mail.ru">MarketDM@mail.ru</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Мы в соцсетях</h3>
+      <div class="social-links">
+        <a href="#" onclick="openSocialModal('VK')" data-tooltip="VK (скоро)" class="social-link"><img src="/images/vk.png" alt="Vkontakte"></a>
+        <a href="#" onclick="openSocialModal('Telegram')" data-tooltip="Telegram (скоро)" class="social-link"><img src="/images/tg.png" alt="Telegram"></a>
+        <a href="#" onclick="openSocialModal('WhatsApp')" data-tooltip="WhatsApp (скоро)" class="social-link"><img src="/images/what.png" alt="Whatsapp"></a>
+        <a href="#" onclick="openSocialModal('Instagram')" data-tooltip="Instagram (скоро)" class="social-link"><img src="/images/inst.png" alt="Instagram"></a>
+        <a href="#" onclick="openSocialModal('YouTube')" data-tooltip="YouTube (скоро)" class="social-link"><img src="/images/you.png" alt="Youtube"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 MarketDM. Все права защищены.</p>
+  </div>
+</footer>
+
+<!-- Модальное окно для соцсетей -->
+<div class="modal" id="socialModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="socialModalTitle">Скоро появится</h3>
+      <button class="close-btn" id="closeSocialModal">&times;</button>
+    </div>
+    <div style="padding: 2rem;">
+      <p style="font-size: 1.2rem; margin-bottom: 1.5rem;" id="socialModalMessage">Здесь будет ваш Telegram</p>
+      <button class="continue-btn" id="socialModalBtn">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Функции для модального окна соцсетей ----------
+  const socialModal = document.getElementById('socialModal');
+  const closeSocialModal = document.getElementById('closeSocialModal');
+  const socialModalTitle = document.getElementById('socialModalTitle');
+  const socialModalMessage = document.getElementById('socialModalMessage');
+  const socialModalBtn = document.getElementById('socialModalBtn');
+
+  function openSocialModal(socialName) {
+    socialModalTitle.textContent = 'Скоро появится';
+    socialModalMessage.textContent = `Здесь будет ваш ${socialName}`;
+    socialModal.classList.add('show');
+  }
+
+  function closeSocialModalFn() {
+    socialModal.classList.remove('show');
+  }
+
+  closeSocialModal.addEventListener('click', closeSocialModalFn);
+  socialModalBtn.addEventListener('click', closeSocialModalFn);
+  socialModal.addEventListener('click', (e) => {
+    if (e.target === socialModal) closeSocialModalFn();
+  });
+
+  // ---------- Профиль ----------
+  async function loadUserInfo() {
+    const token = localStorage.getItem('jwt');
+    const userInfoDiv = document.getElementById('userInfo');
+    if (!token) {
+      userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+      return;
+    }
+    try {
+      const response = await fetch('/api/users/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (response.ok) {
+        const user = await response.json();
+        const isAdmin = user.roles && user.roles.includes('ROLE_ADMIN');
+        let userHtml = '<a href="/cart-icon2.html" class="icon-btn"><img src="/images/cart-icon2.png" alt="Корзина" class="cart-icon2"><span class="icon-label">Корзина</span></a><a href="/profile-icon2.html" class="icon-btn"><img src="/images/profile-icon2.png" alt="Профиль" class="profile-icon2"><span class="icon-label">Профиль</span></a>';
+        if (isAdmin) userHtml += '<span class="admin-badge">ADMIN</span>';
+        userHtml += '<button class="logout-btn" id="logoutBtn">Выйти</button>';
+        userInfoDiv.innerHTML = userHtml;
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          localStorage.removeItem('jwt');
+          window.location.href = '/login.html';
+        });
+      } else {
+        localStorage.removeItem('jwt');
+        userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+      }
+    } catch (err) {
+      console.error('Ошибка загрузки профиля', err);
+      userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+    }
+  }
+
+  // ---------- Поиск ----------
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const query = document.getElementById('searchInput').value.trim();
+    if (query) {
+      window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+    }
+  });
+
+  document.getElementById('searchInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+  });
+
+  // ---------- Инициализация ----------
+  window.addEventListener('load', () => {
+    loadUserInfo();
+  });
+</script>
+</body>
+</html>
