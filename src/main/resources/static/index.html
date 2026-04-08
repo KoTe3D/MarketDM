@@ -648,6 +648,25 @@
             }
 
         }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #floatingSupportBtn:hover {
+            transform: translateY(-3px) scale(1.06);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.32);
+        }
+
+        #floatingSupportBtn:active {
+            transform: scale(0.96);
+        }
     </style>
     <!-- Яндекс Карты (ключ тот же) -->
     <script src="https://api-maps.yandex.ru/2.1/?apikey=e2d67bac-2021-46f8-bb1a-930bf3105bd1&lang=ru_RU" type="text/javascript"></script>
@@ -800,7 +819,7 @@
                 <li><a href="/delivery.html">Доставка и оплата</a></li>
                 <li><a href="/return.html">Возврат товара</a></li>
                 <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
-                <li><a href="/support.html">Служба поддержки</a></li>
+                <li><a href="#" id="supportLink">Обратиться в поддержку</a></li>
                 <li><a href="/feedback.html">Оставить отзыв</a></li>
             </ul>
         </div>
@@ -829,6 +848,113 @@
         <p>&copy; 2026 MarketDM. Все права защищены.</p>
     </div>
 </footer>
+<!-- =============== ПЛАВАЮЩАЯ КНОПКА ЧАТА =============== -->
+
+<button id="floatingSupportBtn" style="
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 54px;
+        height: 54px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #d8929d 50%, #a56a75 100%);
+        color: white;
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+        z-index: 1200;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+" title="Чат поддержки" aria-label="Открыть чат поддержки">💬</button>
+
+<div id="supportModal" class="modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; z-index: 1000;">
+    <div class="modal-content" style="position: relative; max-width: 450px; min-height: 200px; background: rgba(0, 0, 0, 0.8); border-radius: 12px; padding: 1.6rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border: 2px solid #ffb6c1;">
+
+        <!-- Крестик без круга -->
+        <button onclick="document.getElementById('supportModal').style.display='none'" style="position: absolute; top: 4px; right: 8px; background: none; border: none; font-size: 24px; cursor: pointer; color: #ffc638;">
+            ×
+        </button>
+
+        <div class="modal-header" style="border-bottom: none; margin-bottom: 0.5rem;">
+            <h3 style="margin:0; color: #ffc638; font-size: 1.1rem;">Для связи с нами можете воспользоваться контактами ниже</h3>
+        </div>
+
+        <p style="margin: 1rem 0 1rem 0; color: #ffc638; font-weight: 490">
+            Электронная почта: MarketDM@mail.ru<br>Номер телефона: +7 (***) ***-**-**
+        </p>
+
+        <button id="openChatBtn" style="background: #00cdfd; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
+            Чат с поддержкой
+        </button>
+    </div>
+</div>
+
+<div id="chatPanel" style="
+        position: fixed;
+        bottom: 24px;
+        right: -420px;
+        width: 360px;
+        height: 520px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        z-index: 1100;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: right 0.3s ease;
+">
+    <!-- Заголовок -->
+    <div style="
+            background: #002951;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+    ">
+        <span>💬 Поддержка</span>
+        <button id="closeChat" style="
+                background: #ffc638;
+                color: #002951;
+                border: none;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-weight: bold;
+        ">&times;</button>
+    </div>
+
+    <!-- Сообщения -->
+    <div id="chatMessages" style="
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+    "></div>
+
+    <!-- Форма создания тикета -->
+    <div id="ticketForm" style="padding: 15px; background: white;">
+        <input type="text" id="subjectInput" placeholder="Тема вопроса" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:6px;">
+        <textarea id="descInput" rows="3" placeholder="Опишите проблему..." style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:6px;"></textarea>
+        <button id="createTicketBtn" style="width:100%; padding:10px; border:none; border-radius:6px; background:#4CAF50; color:white; font-weight:bold; cursor:pointer;">
+            Создать тикет
+        </button>
+    </div>
+
+    <!-- Поле ввода сообщений -->
+    <div id="messageInputBox" style="display:none; padding: 12px; background: white; border-top: 1px solid #eee;">
+        <div style="display:flex; gap:8px;">
+            <input id="messageInput" placeholder="Сообщение..." style="flex:1; padding:10px; border:1px solid #ccc; border-radius:6px;">
+            <button id="sendMessageBtn" style="padding:10px 12px; border:none; border-radius:6px; background:#00cdfd; color:white; font-weight:bold; cursor:pointer;">→</button>
+        </div>
+    </div>
+</div>
 
 <script>
     // ---------- Данные ПВЗ ----------
@@ -1219,6 +1345,163 @@
         loadUserInfo();
         renderCategoryMenu();
     });
+
+    // ====== ЛОГИКА ЧАТА ПОДДЕРЖКИ ======
+
+    let currentTicketId = null;
+
+    // Открыть модалку при клике на кнопку в футере или плавающую
+    document.getElementById('supportLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const supportModal = document.getElementById('supportModal');
+        if (supportModal) supportModal.style.display = 'flex';
+    });
+
+    document.getElementById('openSupportLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const supportModal = document.getElementById('supportModal');
+        if (supportModal) supportModal.style.display = 'flex';
+    });
+
+    document.getElementById('floatingSupportBtn')?.addEventListener('click', () => {
+        const supportModal = document.getElementById('supportModal');
+        if (supportModal) supportModal.style.display = 'none';
+        const chatPanel = document.getElementById('chatPanel');
+        if (chatPanel) chatPanel.style.right = '24px';
+        const floatingSupportBtn = document.getElementById('floatingSupportBtn');
+        if (floatingSupportBtn) floatingSupportBtn.style.display = 'none';
+    });
+
+    // Закрыть модалку при клике вне
+    document.getElementById('supportModal')?.addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            e.target.style.display = 'none';
+        }
+    });
+
+    // Открыть чат
+    document.getElementById('openChatBtn')?.addEventListener('click', () => {
+        const supportModal = document.getElementById('supportModal');
+        if (supportModal) supportModal.style.display = 'none';
+        const chatPanel = document.getElementById('chatPanel');
+        if (chatPanel) chatPanel.style.right = '24px';
+        const floatingSupportBtn = document.getElementById('floatingSupportBtn');
+        if (floatingSupportBtn) floatingSupportBtn.style.display = 'none';
+    });
+
+    // Закрыть чат
+    document.getElementById('closeChat')?.addEventListener('click', () => {
+        const chatPanel = document.getElementById('chatPanel');
+        if (chatPanel) chatPanel.style.right = '-420px';
+        const floatingSupportBtn = document.getElementById('floatingSupportBtn');
+        if (floatingSupportBtn) floatingSupportBtn.style.display = 'block';
+        currentTicketId = null;
+    });
+
+    // Создать тикет
+    document.getElementById('createTicketBtn')?.addEventListener('click', async () => {
+        const subject = document.getElementById('subjectInput').value;
+        const desc = document.getElementById('descInput').value;
+
+        if (!subject || !desc) {
+            alert("Заполните тему и описание");
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/support/tickets', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ subject, description: desc })
+            });
+
+            const ticket = await res.json();
+            currentTicketId = ticket.id;
+
+            // Переключить интерфейс
+            const ticketForm = document.getElementById('ticketForm');
+            if (ticketForm) ticketForm.style.display = 'none';
+            const messageInputBox = document.getElementById('messageInputBox');
+            if (messageInputBox) messageInputBox.style.display = 'block';
+
+            addMessage("Система", "Тикет создан. Ожидайте ответа оператора.", true);
+            loadMessages(); // начать автообновление
+        } catch (err) {
+            alert("Ошибка подключения к серверу");
+            console.error(err);
+        }
+    });
+
+    // Отправить сообщение
+    document.getElementById('sendMessageBtn')?.addEventListener('click', async () => {
+        const input = document.getElementById('messageInput');
+        const msg = input.value.trim();
+        if (!currentTicketId || !msg) return;
+
+        try {
+            await fetch(`/api/support/tickets/${currentTicketId}/messages`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+            });
+
+            addMessage("Вы", msg, false);
+            input.value = '';
+            loadMessages();
+        } catch (err) {
+            addMessage("Система", "Не удалось отправить. Проверьте соединение.", true);
+        }
+    });
+
+    // Добавить сообщение в чат
+    function addMessage(sender, text, fromOperator) {
+        const div = document.createElement('div');
+        div.style.padding = '8px 12px';
+        div.style.margin = '6px 0';
+        div.style.alignSelf = fromOperator ? 'flex-start' : 'flex-end';
+        div.style.backgroundColor = fromOperator ? '#e6f7ff' : '#00cdfd';
+        div.style.color = fromOperator ? '#002951' : 'white';
+        div.style.borderRadius = '12px';
+        div.style.maxWidth = '80%';
+        div.style.wordBreak = 'break-word';
+        const strong = document.createElement('strong');
+        strong.textContent = sender;
+        const br = document.createElement('br');
+        const messageText = document.createElement('span');
+        messageText.textContent = text;
+        div.appendChild(strong);
+        div.appendChild(br);
+        div.appendChild(messageText);
+
+        document.getElementById('chatMessages')?.appendChild(div);
+        scrollChat();
+    }
+
+    // Прокрутка вниз
+    function scrollChat() {
+        const chat = document.getElementById('chatMessages');
+        if (!chat) return;
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Автообновление каждые 3 секунды
+    function loadMessages() {
+        if (!currentTicketId) return;
+        fetch(`/api/support/tickets/${currentTicketId}/messages`)
+            .then(res => res.json())
+            .then(messages => {
+                const container = document.getElementById('chatMessages');
+                if (!container) return;
+                container.innerHTML = '';
+                messages.forEach(m => {
+                    addMessage(m.senderName, m.message, m.fromOperator);
+                });
+                scrollChat();
+            })
+            .catch(() => setTimeout(loadMessages, 5000));
+    }
+    setInterval(loadMessages, 3000);
+
 </script>
 </body>
 </html>
