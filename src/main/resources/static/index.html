@@ -199,10 +199,15 @@
         }
         .user-info a {
             text-decoration: none;
-            color: #cc570b;
+            color: #d5a52f;
             display: flex;
             align-items: center;
             gap: 0.3rem;
+        }
+
+        .user-info a:hover {
+            color: #dca638;
+            text-shadow: 0 0 3px #fdc4cb;
         }
 
         .admin-badge {
@@ -894,9 +899,10 @@
         position: fixed;
         bottom: 24px;
         right: -420px;
-        width: 360px;
+        width: 350px;
         height: 520px;
-        background: white;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
         border-radius: 12px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         z-index: 1100;
@@ -904,10 +910,11 @@
         flex-direction: column;
         overflow: hidden;
         transition: right 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.3);
 ">
     <!-- Заголовок -->
     <div style="
-            background: #002951;
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             padding: 15px;
             font-weight: bold;
@@ -915,17 +922,20 @@
             justify-content: space-between;
             align-items: center;
     ">
-        <span>💬 Поддержка</span>
+        <span><span style="color: #ffc638;">Поддержка</span></span>
         <button id="closeChat" style="
-                background: #ffc638;
-                color: #002951;
+                background: transparent;
+                position: absolute;
+                color: #ffc638;
                 border: none;
                 width: 30px;
                 height: 30px;
-                border-radius: 50%;
                 cursor: pointer;
                 font-weight: bold;
-        ">&times;</button>
+                font-size: 26px;
+                top: 12px;
+                right: 8px;
+        ">×</button>
     </div>
 
     <!-- Сообщения -->
@@ -933,25 +943,25 @@
             flex: 1;
             padding: 15px;
             overflow-y: auto;
-            background: #f9f9f9;
+            background: rgba(255, 255, 255, 0.2);
             display: flex;
             flex-direction: column;
     "></div>
 
     <!-- Форма создания тикета -->
-    <div id="ticketForm" style="padding: 15px; background: white;">
+    <div id="ticketForm" style="padding: 15px; background: rgba(255, 255, 255, 0.2);">
         <input type="text" id="subjectInput" placeholder="Тема вопроса" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:6px;">
         <textarea id="descInput" rows="3" placeholder="Опишите проблему..." style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:6px;"></textarea>
-        <button id="createTicketBtn" style="width:100%; padding:10px; border:none; border-radius:6px; background:#4CAF50; color:white; font-weight:bold; cursor:pointer;">
+        <button id="createTicketBtn" style="width:100%; padding:10px; border:none; border-radius:6px; background: rgba(0, 205, 253, 0.7); color:white; font-weight:bold; cursor:pointer;">
             Создать тикет
         </button>
     </div>
 
     <!-- Поле ввода сообщений -->
-    <div id="messageInputBox" style="display:none; padding: 12px; background: white; border-top: 1px solid #eee;">
+    <div id="messageInputBox" style="display:none; padding: 12px; background: rgba(255, 255, 255, 0.2); border-top: 1px solid #eee;">
         <div style="display:flex; gap:8px;">
             <input id="messageInput" placeholder="Сообщение..." style="flex:1; padding:10px; border:1px solid #ccc; border-radius:6px;">
-            <button id="sendMessageBtn" style="padding:10px 12px; border:none; border-radius:6px; background:#00cdfd; color:white; font-weight:bold; cursor:pointer;">→</button>
+            <button id="sendMessageBtn" style="padding:10px 12px; border:none; border-radius:6px; background: rgba(255, 255, 255, 0.2); color:white; font-weight:bold; cursor:pointer;">→</button>
         </div>
     </div>
 </div>
