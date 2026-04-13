@@ -117,11 +117,11 @@
 </head>
 <body>
 <div class="error-container">
-    <!-- ТЕПЕРЬ ТЕКСТ НАД КАРТИНКОЙ -->
+    <!-- Текст выше картинки -->
     <div class="error-message-top" th:text="${errorTitle}">Внутренняя ошибка сервера</div>
     <div class="error-message-top" th:text="${errorMessage}">Что-то пошло не так.</div>
 
-    <!-- КАРТИНКА С ЦИФРОЙ -->
+    <!-- Картинка кодом статуса -->
     <div class="image-wrapper">
         <img th:src="@{/images/windowstatuscod.png}"
              alt="Error Image"
@@ -130,7 +130,7 @@
         <div class="status-overlay" th:text="${statusCode}">404</div>
     </div>
 
-    <!-- ССЫЛКА ОСТАЛАСЬ ПОД КАРТИНКОЙ -->
+    <!-- Ссылка под картинкой -->
     <a th:href="@{/}" class="back-link">← Вернуться на главную</a>
 </div>
 </body>
