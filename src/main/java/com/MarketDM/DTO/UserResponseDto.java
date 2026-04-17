@@ -29,7 +29,7 @@ public class UserResponseDto {
                 .lastName(user.getLastName())
                 .avatarUrl(user.getAvatarUrl())
                 .provider(user.getProvider())
-                .enabled(user.isEnabled())   // ВАЖНО: для boolean геттер isEnabled()
+                .enabled(user.isEnabled())   // для boolean геттер isEnabled()
                 .roles(user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.toList()))

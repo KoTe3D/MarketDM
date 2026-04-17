@@ -28,7 +28,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    // ====== Поиск всех пользователей ======
+    // Поиск всех пользователей
     public List<UserResponseDto> findAll() {
         return userRepository.findAll()
                 .stream()
@@ -36,27 +36,27 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    // ====== Поиск пользователя по ID ======
+    // Поиск пользователя по ID
     public UserResponseDto findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         return UserResponseDto.fromEntity(user);
     }
 
-    // ====== Поиск пользователя по email ======
+    // Поиск пользователя по email
     public UserResponseDto findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
         return UserResponseDto.fromEntity(user);
     }
 
-    // ====== Все пользователи с пагинацией ======
+    // Все пользователи с пагинацией
     public Page<UserResponseDto> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(UserResponseDto::fromEntity);
     }
 
-    // ====== Создание нового пользователя (обычная регистрация) ======
+    // Создание нового пользователя (обычная регистрация)
     @Transactional
     public UserResponseDto create(UserCreateDto createDto) {
         // Проверяем, не занят ли email
@@ -81,7 +81,7 @@ public class UserService {
         return UserResponseDto.fromEntity(user);
     }
 
-    // ====== Обновление пользователя (частичное) ======
+    // Обновление пользователя (частичное)
     @Transactional
     public UserResponseDto update(Long id, UserUpdateDto dto) {
         User user = userRepository.findById(id)
@@ -121,7 +121,7 @@ public class UserService {
         return UserResponseDto.fromEntity(user);
     }
 
-    // ====== Удаление пользователя ======
+    // Удаление пользователя
     @Transactional
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {

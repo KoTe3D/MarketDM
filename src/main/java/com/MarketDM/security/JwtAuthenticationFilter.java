@@ -30,18 +30,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
-            // 1. Извлекаем JWT из заголовка Authorization
+            // Извлекаем JWT из заголовка Authorization
             String jwt = getJwtFromRequest(request);
 
-            // 2. Если токен есть и он валиден
+            // Если токен есть и он валиден
             if (jwt != null && tokenProvider.validateToken(jwt)) {
-                // 3. Извлекаем username (email) из токена
+                // Извлекаем username (email) из токена
                 String username = tokenProvider.extractUsername(jwt);
 
-                // 4. Загружаем данные пользователя из БД
+                // Загружаем данные пользователя из БД
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                // 5. Создаём объект аутентификации
+                // Создаём объект аутентификации
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -49,12 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 userDetails.getAuthorities()
                         );
 
-                // 6. Добавляем детали запроса (IP, сессию и т.п.)
+                // Добавляем детали запроса (IP, сессию и т.п.)
                 authentication.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
-                // 7. Устанавливаем аутентификацию в SecurityContext
+                // Устанавливаем аутентификацию в SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 log.debug("User {} authenticated successfully", username);
@@ -63,12 +63,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("Could not set user authentication in security context", e);
         }
 
-        // 8. Продолжаем выполнение цепочки фильтров
+        // Продолжаем выполнение цепочки фильтров
         filterChain.doFilter(request, response);
     }
 
-    /**
-     * Достаёт JWT из заголовка Authorization (формат "Bearer <token>")
+    /*
+     Достаёт JWT из заголовка Authorization (формат "Bearer <token>")
      */
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -78,8 +78,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    /**
-     * Можно переопределить, чтобы не фильтровать некоторые URL
+    /*
+     Можно переопределить, чтобы не фильтровать некоторые URL
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {

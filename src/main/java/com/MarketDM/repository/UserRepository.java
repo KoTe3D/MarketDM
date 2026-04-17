@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Проверка, существует ли пользователь с таким provider_id (для OAuth2)
     boolean existsByProviderId(String providerId);
 
-    // Если вы решили оставить составной уникальный ключ (provider, provider_id),
-    // то добавьте метод для поиска по паре:
+    // При использовании составного уникального ключа (provider, provider_id),
+    // добавляем метод для поиска по паре:
     Optional<User> findByProviderAndProviderId(String provider, String providerId);
 }

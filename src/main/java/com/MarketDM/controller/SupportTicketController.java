@@ -30,7 +30,7 @@ public class SupportTicketController {
     @Autowired
     private TemplateService templateService;
 
-    // ✅ НОВЫЙ МЕТОД: для внутреннего использования
+    // НОВЫЙ МЕТОД: для внутреннего использования
     private void sendMessage(Long ticketId, String message, boolean fromOperator, String senderName) {
         SupportTicket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Тикет не найден"));
@@ -64,7 +64,6 @@ public class SupportTicketController {
             ticketRepository.save(ticket);
         }
 
-        // ✅ Теперь это работает:
         sendMessage(ticket.getId(), "Тикет создан. Ожидайте ответа оператора.", true, "Система");
 
         return ResponseEntity.ok(ticket);

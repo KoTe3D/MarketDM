@@ -32,8 +32,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthEntryPoint;
     private final CorsConfigurationSource corsConfigurationSource;
 
-    /**
-     * API для мобильных приложений и SPA (React/Vue) – STATELESS, JWT
+    /*
+     API для мобильных приложений и SPA (React/Vue) – STATELESS, JWT
      */
     @Bean
     @Order(1)
@@ -81,8 +81,8 @@ public class SecurityConfig {
     private String rememberMeKey;
 
 
-    /**
-     * Административная панель – традиционный веб-интерфейс с сессиями
+    /*
+     Административная панель – веб-интерфейс с сессиями
      */
     @Bean
     @Order(2)
@@ -123,8 +123,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Основной веб-интерфейс: главная, каталог, корзина, регистрация и т.д.
+    /*
+     Основной веб-интерфейс: главная, каталог, корзина, регистрация и т.д.
      */
     @Bean
     @Order(3)
@@ -143,7 +143,7 @@ public class SecurityConfig {
                         .requestMatchers("/cart", "/profile", "/orders")
                         .authenticated()
                         // Всё остальное
-                        .anyRequest().permitAll() // или authenticated(), по вашему усмотрению
+                        .anyRequest().permitAll() // или authenticated(), в случае надобности
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -166,7 +166,7 @@ public class SecurityConfig {
                         .tokenValiditySeconds(86400 * 7) // 7 дней
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**", "/mobile/**") // если используете
+                        .ignoringRequestMatchers("/api/**", "/mobile/**")
                 );
 
         return http.build();

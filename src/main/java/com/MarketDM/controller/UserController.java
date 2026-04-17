@@ -22,7 +22,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // ====== 1. Получить всех пользователей (с пагинацией и сортировкой) ======
+    // Получить всех пользователей (с пагинацией и сортировкой)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')") // только админ может видеть всех
     public ResponseEntity<Page<UserResponseDto>> findAll(
@@ -31,21 +31,21 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll(pageable));
     }
 
-    // ====== 2. Получить одного пользователя по ID ======
+    // Получить одного пользователя по ID
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
-    // ====== 3. Создать нового пользователя (обычная регистрация) ======
+    // Создать нового пользователя (обычная регистрация)
     @PostMapping
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserCreateDto createDto) {
         UserResponseDto created = userService.create(createDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // ====== 4. Обновить пользователя (частичное обновление) ======
+    // Обновить пользователя (частичное обновление)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public ResponseEntity<UserResponseDto> update(
@@ -56,7 +56,7 @@ public class UserController {
         return ResponseEntity.ok(updated);
     }
 
-    // ====== 5. Удалить пользователя ======
+    // Удалить пользователя
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
@@ -64,7 +64,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // ====== 6. Получить текущего пользователя (по JWT) ======
+    // Получить текущего пользователя (по JWT)
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDto> getCurrentUser(
