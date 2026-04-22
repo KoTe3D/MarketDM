@@ -967,7 +967,7 @@
 </div>
 
 <script>
-    // ---------- Данные ПВЗ ----------
+    // Данные ПВЗ
     const pickupPoints = [
         { id: 1, name: 'ПВЗ на Тверской', address: 'ул. Тверская, 7', city: 'Москва', coords: [55.757, 37.615] },
         { id: 2, name: 'ПВЗ на Арбате', address: 'ул. Арбат, 20', city: 'Москва', coords: [55.751, 37.590] },
@@ -976,7 +976,7 @@
         { id: 5, name: 'ПВЗ на ВДНХ', address: 'пр-т Мира, 119', city: 'Москва', coords: [55.826, 37.639] }
     ];
 
-    // ---------- Элементы DOM ----------
+    // Элементы DOM
     const addressPicker = document.getElementById('addressPicker');
     const currentAddressSpan = document.getElementById('currentAddress');
     const addressChoiceModal = document.getElementById('addressChoiceModal');
@@ -1010,7 +1010,7 @@
     // Состояние выбора
     let currentChoice = 'courier';
 
-    // ---------- Открытие основного модального окна ----------
+    //  Открытие основного модального окна
     function openChoiceModal() {
         addressChoiceModal.classList.add('show');
         setActiveChoice('courier');
@@ -1022,7 +1022,7 @@
     addressPicker.addEventListener('click', openChoiceModal);
     closeChoiceModal.addEventListener('click', closeChoiceModalFn);
 
-    // ---------- Переключение между курьером и ПВЗ ----------
+    // Переключение между курьером и ПВЗ
     function setActiveChoice(choice) {
         currentChoice = choice;
         if (choice === 'courier') {
@@ -1046,7 +1046,7 @@
     courierChoice.addEventListener('click', () => setActiveChoice('courier'));
     pickupChoice.addEventListener('click', () => setActiveChoice('pickup'));
 
-    // ---------- Работа с картой для курьера ----------
+    // Работа с картой для курьера
     openMapModalBtn.addEventListener('click', () => {
         mapModal.classList.add('show');
         if (!map) {
@@ -1162,7 +1162,7 @@
         closeChoiceModalFn();
     });
 
-    // ---------- Пункты выдачи ----------
+    // Пункты выдачи
     function initPickupMap() {
         if (!window.ymaps) { console.error('❌ Яндекс.Карты не загружены'); return; }
         ymaps.ready(() => {
@@ -1203,13 +1203,13 @@
         closeChoiceModalFn();
     }
 
-    // ---------- Загрузка сохранённого адреса ----------
+    // Загрузка сохранённого адреса
     const savedAddress = localStorage.getItem('deliveryAddress');
     if (savedAddress) {
         currentAddressSpan.textContent = savedAddress;
     }
 
-    // ---------- Поиск товаров ----------
+    // Поиск товаров
     document.getElementById('searchBtn').addEventListener('click', () => {
         const query = document.getElementById('searchInput').value.trim();
         if (query) {
@@ -1220,7 +1220,7 @@
         if (e.key === 'Enter') document.getElementById('searchBtn').click();
     });
 
-    // ---------- Каталог (упрощённо) ----------
+    // Каталог (упрощённо)
     const subcategoriesData = {
         electronics: ['Смартфоны', 'Ноутбуки', 'Наушники', 'Умные часы', 'Планшеты'],
         home: ['Пылесосы', 'Кухонная техника', 'Текстиль', 'Освещение', 'Мебель'],
@@ -1292,7 +1292,7 @@
         });
     }
 
-    // ---------- Профиль ----------
+    // Профиль
     async function loadUserInfo() {
         const token = localStorage.getItem('jwt');
         const userInfoDiv = document.getElementById('userInfo');
@@ -1325,7 +1325,7 @@
         }
     }
 
-    // ---------- Функции для модального окна соцсетей ----------
+    // Функции для модального окна соцсетей
     const socialModal = document.getElementById('socialModal');
     const closeSocialModal = document.getElementById('closeSocialModal');
     const socialModalTitle = document.getElementById('socialModalTitle');
@@ -1350,13 +1350,13 @@
         if (e.target === socialModal) closeSocialModalFn();
     });
 
-    // ---------- Инициализация ----------
+    // Инициализация
     window.addEventListener('load', () => {
         loadUserInfo();
         renderCategoryMenu();
     });
 
-    // ====== ЛОГИКА ЧАТА ПОДДЕРЖКИ ======
+    // Логика чата поддержки
 
     let currentTicketId = null;
 
