@@ -50,7 +50,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top; /* выравнивание по верхнему краю */
+            object-position: top;
             z-index: 0;
             pointer-events: none;
         }
@@ -64,8 +64,8 @@
         .header-left-group {
             display: flex;
             align-items: center;
-            gap: 1.5rem;       /* отступы между элементами */
-            margin-left: 200px;  /* сдвиг вправо (нужное значение) */
+            gap: 1.5rem;
+            margin-left: 200px;
             flex-wrap: wrap;
             margin-top: -22px;
             flex: 1;
@@ -75,8 +75,8 @@
             font-size: 2.8rem;
             color: #00cdfd;
             cursor: pointer;
-            margin-left: -180px;  /* добавить отступ слева */
-            margin-right: 7px; /* добавить отступ справа */
+            margin-left: -180px;
+            margin-right: 7px;
             order: 2;
         }
         .catalog-btn {
@@ -91,50 +91,50 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            order: 3;               /* визуально третий */
+            order: 3;
         }
         /* Иконка каталога */
         .catalog-icon {
             width: 20px;
             height: 20px;
             display: block;
-            transition: all 0.2s ease;  /* плавное изменение */
+            transition: all 0.2s ease;
         }
         /* Подсветка иконки при наведении на всю кнопку */
         .catalog-btn:hover .catalog-icon {
             filter: brightness(0) invert(1) drop-shadow(0 0 5px #006d81);
-            transform: scale(1.3);  /* чуть увеличиваем для эффекта */
+            transform: scale(1.3);
         }
 
         .catalog-btn:hover { background: #0fa8cc; }
 
         .address-picker {
             display: flex;
-            font-size: 13px;           /*длина текста*/
+            font-size: 13px;
             align-items: center;
             gap: 8px;
             cursor: pointer;
             white-space: nowrap;
             flex: 0 1 auto;
             max-width: 400px;
-            color: #0dc0e8;           /* обычный цвет текста */
+            color: #0dc0e8;
             font-weight: 500;
             background: none;
-            padding: 4px 8px;          /* добавляем немного внутренних отступов, чтобы фон был красивым */
-            border-radius: 20px;       /* мягкое скругление для фона */
-            transition: all 0.2s ease; /* плавность всех изменений */
-            order: 1;               /* визуально первый */
-            margin-left: 0;          /* убираем лишние отступы */
-            margin-top: -115px;      /* поднимаем на уровень логотипа */
+            padding: 4px 8px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            order: 1;
+            margin-left: 0;
+            margin-top: -115px;
             margin-right: 10px;
         }
 
         /* Эффект при наведении */
         .address-picker:hover {
-            background: rgba(0, 205, 253, 0.06);  /* полупрозрачный синий фон */
-            color: #12cdff;                         /* текст становится синим */
-            transform: scale(1.1);                  /* лёгкое увеличение (по желанию) */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* небольшая тень (по желанию) */
+            background: rgba(0, 205, 253, 0.06);
+            color: #12cdff;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .search-box {
@@ -143,7 +143,7 @@
             background: rgba(204, 87, 11, 0);
             border: 1px solid #d3a42f;
             border-radius: 20px;
-            padding: 0.3rem 0.3rem 0.3rem 1rem;  /* отступ справа уменьшен, так как там будет кнопка */
+            padding: 0.3rem 0.3rem 0.3rem 1rem;
             flex: 2;
             max-width: 600px;
             transition: all 0.2s ease;
@@ -172,7 +172,7 @@
         }
 
         .search-button:hover .search {
-            filter: brightness(2);  /* картинка становится ярче */
+            filter: brightness(2);
         }
 
         .search-box:hover {
@@ -195,7 +195,7 @@
             gap: 1rem;
             align-items: center;
             margin-top: 0px;
-            margin-left: auto;  /* прижимает блок к правому краю */
+            margin-left: auto;
         }
         .user-info a {
             text-decoration: none;
@@ -402,15 +402,15 @@
             height: 400px;
         }
         .cart-icon2 {
-            width: 50px;        /* ширина иконки */
-            height: 50px;       /* высота иконки */
-            vertical-align: middle; /* выравнивание по центру строки */
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
         }
         .profile-icon2 {
-            width: 50px;        /* ширина иконки */
-            height: 50px;       /* высота иконки */
+            width: 50px;
+            height: 50px;
             filter: saturate(120%);
-            vertical-align: middle; /* выравнивание по центру строки */
+            vertical-align: middle;
         }
         /* Стили для кнопок-иконок с подписями */
         .icon-btn {
@@ -419,10 +419,10 @@
             cursor: pointer;
             color: #333;
             display: inline-flex;
-            flex-direction: column;    /* иконка сверху, подпись снизу */
+            flex-direction: column;
             align-items: center;
             text-decoration: none;
-            gap: 4px;                  /* отступ между иконкой и подписью */
+            gap: 4px;
             position: relative;
             z-index: 20;
         }
@@ -430,17 +430,17 @@
         /* Подпись: всегда видна */
         .icon-label {
             font-size: 0.8rem;
-            color: #d65b0c;             /* обычный цвет подписи */
+            color: #d65b0c;
             line-height: 1.2;
             text-align: center;
-            transition: all 0.2s ease;  /* плавное изменение всех свойств */
-            pointer-events: none;       /* чтобы подпись не перехватывала клики */
+            transition: all 0.2s ease;
+            pointer-events: none;
         }
 
         /* При наведении на всю кнопку меняем цвет подписи */
         .icon-btn:hover .icon-label {
-            color: #ffc638;             /* новый цвет при наведении (жёлтый) */
-            text-shadow: 0 0 5px #ffc638; /* небольшое свечение (опционально) */
+            color: #ffc638;
+            text-shadow: 0 0 5px #ffc638;
         }
 
         /* Стили для тултипа соцсетей */
@@ -572,9 +572,9 @@
         }
 
         .social-links img {
-            width: 32px;    /* нужная ширина */
-            height: 32px;   /* нужная высота (лучше указать, чтобы не искажалось) */
-            object-fit: contain; /* чтобы картинка вписалась без искажений */
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
         }
 
         .social-link {
@@ -615,15 +615,15 @@
         .footer-column:first-child,
         .footer-column:first-child a,
         .footer-column:first-child li {
-            color: #00cdfd; /* синий */
+            color: #00cdfd;
         }
 
         .footer-column:first-child a {
-            color: #00cdfd; /* для ссылок */
+            color: #00cdfd;
         }
 
         .footer-column:first-child a:hover {
-            color: #ffb6c1; /* цвет при наведении (можно оставить розовый или изменить) */
+            color: #ffb6c1;
         }
 
         /* Адаптивность для мобильных */
@@ -684,23 +684,23 @@
         Ваш браузер не поддерживает видео.
     </video>
 
-    <!-- Левая группа: элементы, которые нужно сдвинуть вправо -->
+    <!-- Левая группа элементов -->
     <div class="header-left-group">
         <!-- 1. Логотип (был вторым, станет первым) -->
         <div class="logo" onclick="window.location.href='/'">MarketDM</div>
 
-        <!-- 2. Кнопка каталога (была первой, станет второй) -->
+        <!-- 2. Кнопка каталога -->
         <button class="catalog-btn" id="catalogBtn">
             <img src="/images/catalog-icon1.png" alt="Каталог" class="catalog-icon">
             <span>Каталог</span>
         </button>
 
-        <!-- 3. Адрес (был третьим, остаётся третьим, но мы его передвинем CSS) -->
+        <!-- 3. Адрес -->
         <div class="address-picker" id="addressPicker">
             <span id="currentAddress">Адрес доставки</span>
         </div>
 
-        <!-- 4. Поиск (без изменений) -->
+        <!-- 4. Поиск -->
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Поиск на MarketDM">
             <div class="search-button" id="searchBtn">
@@ -713,7 +713,7 @@
     <div class="user-info" id="userInfo"></div>
 </header>
 
-<!-- Модальные окна (без изменений) -->
+<!-- Модальные окна -->
 <div class="modal" id="categoryModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -853,7 +853,7 @@
         <p>&copy; 2026 MarketDM. Все права защищены.</p>
     </div>
 </footer>
-<!-- =============== ПЛАВАЮЩАЯ КНОПКА ЧАТА =============== -->
+<!-- Плавающая кнопка чата -->
 
 <button id="floatingSupportBtn" style="
         position: fixed;
@@ -1382,7 +1382,7 @@
         if (floatingSupportBtn) floatingSupportBtn.style.display = 'none';
     });
 
-    // Закрыть модалку при клике вне
+    // Закрыть модалку при клике вне окна
     document.getElementById('supportModal')?.addEventListener('click', (e) => {
         if (e.target === e.currentTarget) {
             e.target.style.display = 'none';
