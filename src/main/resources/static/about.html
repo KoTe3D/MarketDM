@@ -23,7 +23,7 @@
       flex-direction: column;
     }
 
-    /* Шапка (такая же как на главной) */
+    /* Шапка */
     .header {
       position: relative;
       overflow: hidden;
@@ -881,7 +881,7 @@
 </div>
 
 <script>
-  // ---------- Функции для модального окна соцсетей ----------
+  // Функции для модального окна соцсетей
   const socialModal = document.getElementById('socialModal');
   const closeSocialModal = document.getElementById('closeSocialModal');
   const socialModalTitle = document.getElementById('socialModalTitle');
@@ -904,7 +904,7 @@
     if (e.target === socialModal) closeSocialModalFn();
   });
 
-  // ---------- Профиль (как на главной) ----------
+  // Профиль
   async function loadUserInfo() {
     const token = localStorage.getItem('jwt');
     const userInfoDiv = document.getElementById('userInfo');
@@ -937,7 +937,7 @@
     }
   }
 
-  // ---------- Поиск ----------
+  // Поиск
   document.getElementById('searchBtn').addEventListener('click', () => {
     const query = document.getElementById('searchInput').value.trim();
     if (query) {
@@ -949,7 +949,7 @@
     if (e.key === 'Enter') document.getElementById('searchBtn').click();
   });
 
-  // ---------- Инициализация ----------
+  // Инициализация
   window.addEventListener('load', () => {
     loadUserInfo();
   });
