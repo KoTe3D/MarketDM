@@ -81,9 +81,7 @@ public class SecurityConfig {
     private String rememberMeKey;
 
 
-    /*
-     Административная панель – веб-интерфейс с сессиями
-     */
+    /* Административная панель – веб-интерфейс с сессиями */
     @Bean
     @Order(2)
     public SecurityFilterChain adminWebSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -123,9 +121,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /*
-     Основной веб-интерфейс: главная, каталог, корзина, регистрация и т.д.
-     */
+    /* Основной веб-интерфейс: главная, каталог, корзина, регистрация и т.д. */
     @Bean
     @Order(3)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
