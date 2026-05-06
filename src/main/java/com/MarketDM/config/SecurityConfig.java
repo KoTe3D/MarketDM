@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
@@ -31,7 +32,15 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final JwtAuthenticationEntryPoint jwtAuthEntryPoint;
     private final CorsConfigurationSource corsConfigurationSource;
-
+    /*
+     Вынесенный бин провайдер чтобы, чтобы не создавать его 3 раза
+     */
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
     /*
      API для мобильных приложений и SPA (React/Vue) – STATELESS, JWT
      */
@@ -40,12 +49,10 @@ public class SecurityConfig {
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/api/**", "/mobile/**")
-                .authenticationProvider(authenticationProvider())//Хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
+                .authenticationProvider(daoAuthenticationProvider())// Используем общий бин
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .csrf(csrf -> csrf.disable())
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(jwtAuthEntryPoint)
-                )
+                .csrf(csrf -> csrf.disable())// API stateless, CSRF не нужен
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
                 .authorizeHttpRequests(auth -> auth
                         // Публичные эндпоинты (без токена)
                         .requestMatchers(
@@ -72,25 +79,32 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
+                // Заголовки безопасности для API
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'"))
+                        .httpStrictTransportSecurity(hsts -> hsts.maxAgeInSeconds(31536000).includeSubDomains(true))
+                        .frameOptions(frame -> frame.deny()) // API не должен быть во фреймах
+                );
         return http.build();
     }
 
     @Value("${app.security.remember-me.key}")
     private String rememberMeKey;
 
-
-    /* Административная панель – веб-интерфейс с сессиями */
+    //Административная панель – веб-интерфейс с сессиями
     @Bean
     @Order(2)
     public SecurityFilterChain adminWebSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin/**", "/webjars/**", "/css/**", "/js/**")
-                .authenticationProvider(authenticationProvider())//Хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
+                .securityMatcher("/admin/**")// Оставляем /admin/**, статика ниже
+                .authenticationProvider(daoAuthenticationProvider())//Хоть бин и объявлен Spring Security не использует его автоматически в кастомизированных цепочках HttpSecurity, так что нужно его объявить или создастся дефолтный. И не появятся ошибки UserDetailsService и PasswordEncoder.
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/login", "/admin/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // Разрешаю статику для админки:
+                        .requestMatchers("/webjars/**", "/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -115,7 +129,15 @@ public class SecurityConfig {
                         .key(rememberMeKey)
                         .tokenValiditySeconds(86400 * 30) // 30 дней
                 )
-                .csrf(csrf -> csrf.disable()// временно отключаем CSRF для простоты разработки и экономии времени
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())// с осторожностью нужна защита от XSS
+                        .ignoringRequestMatchers("/api/**", "/mobile/**") // только API исключения
+                )
+                //Заголовки для админки
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin()) // Разрешаем фреймы для H2 Console (dev)
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"))
+                        .httpStrictTransportSecurity(hsts -> hsts.maxAgeInSeconds(31536000).includeSubDomains(true))
                 );
 
         return http.build();
@@ -127,7 +149,7 @@ public class SecurityConfig {
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/**") // Ловит всё, что не подошло под /api и /admin
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         // Публичные страницы
                         .requestMatchers("/", "/login", "/register", "/products", "/categories", "/search")
@@ -139,7 +161,7 @@ public class SecurityConfig {
                         .requestMatchers("/cart", "/profile", "/orders")
                         .authenticated()
                         // Всё остальное
-                        .anyRequest().permitAll() // или authenticated(), в случае надобности
+                        .anyRequest().authenticated() // Будет доступно после авторизации
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -162,7 +184,8 @@ public class SecurityConfig {
                         .tokenValiditySeconds(86400 * 7) // 7 дней
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**", "/mobile/**")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())// с осторожностью нужна защита от XSS
+                        .ignoringRequestMatchers("/api/**", "/mobile/**") // только API исключения
                 );
 
         return http.build();
@@ -174,14 +197,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+
     }
 }
