@@ -810,22 +810,22 @@
         <div class="footer-column">
             <h3>О компании</h3>
             <ul>
-                <li><a href="/about.html">О нас</a></li>
-                <li><a href="/jobs.html">Вакансии</a></li>
-                <li><a href="/blog.html">Блог</a></li>
-                <li><a href="/terms.html">Условия использования</a></li>
-                <li><a href="/privacy.html">Политика конфиденциальности</a></li>
+                <li><a href="/about">О нас</a></li>
+                <li><a href="/jobs">Вакансии</a></li>
+                <li><a href="/blog">Блог</a></li>
+                <li><a href="/terms">Условия использования</a></li>
+                <li><a href="/privacy">Политика конфиденциальности</a></li>
             </ul>
         </div>
 
         <div class="footer-column">
             <h3>Помощь</h3>
             <ul>
-                <li><a href="/delivery.html">Доставка и оплата</a></li>
-                <li><a href="/return.html">Возврат товара</a></li>
-                <li><a href="/faq.html">Часто задаваемые вопросы</a></li>
+                <li><a href="/delivery">Доставка и оплата</a></li>
+                <li><a href="/return">Возврат товара</a></li>
+                <li><a href="/faq">Часто задаваемые вопросы</a></li>
                 <li><a href="#" id="supportLink">Обратиться в поддержку</a></li>
-                <li><a href="/feedback.html">Оставить отзыв</a></li>
+                <li><a href="/feedback">Оставить отзыв</a></li>
             </ul>
         </div>
 
@@ -1297,7 +1297,7 @@
         const token = localStorage.getItem('jwt');
         const userInfoDiv = document.getElementById('userInfo');
         if (!token) {
-            userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+            userInfoDiv.innerHTML = '<a href="/login">Вход</a><a href="/register">Регистрация</a>';
             return;
         }
         try {
@@ -1317,11 +1317,11 @@
                 });
             } else {
                 localStorage.removeItem('jwt');
-                userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+                userInfoDiv.innerHTML = '<a href="/login">Вход</a><a href="/register">Регистрация</a>';
             }
         } catch (err) {
             console.error('Ошибка загрузки профиля', err);
-            userInfoDiv.innerHTML = '<a href="/login.html">Вход</a><a href="/register.html">Регистрация</a>';
+            userInfoDiv.innerHTML = '<a href="/login">Вход</a><a href="/register">Регистрация</a>';
         }
     }
 

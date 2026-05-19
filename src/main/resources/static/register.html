@@ -44,7 +44,7 @@
         resultDiv.className = ''; // сбрасываем класс
 
         try {
-            // ✅ ИСПРАВЛЕННЫЙ URL
+            // URL
             const response = await fetch('/api/v1/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -52,11 +52,23 @@
             });
 
             if (response.ok) {
-                const user = await response.json();
-                resultDiv.innerHTML = `<div class="success">✅ Пользователь успешно создан! </div>`;
+                const userData = await response.json(); // Получаем данные пользователя
+
+                // Сохраняем JWT
+                if (userData.token) {
+                    localStorage.setItem('jwt', userData.token);
+                }
+
+                // Показываем успех
+                resultDiv.innerHTML = `<div class="success">✅ Регистрация успешна! Перенаправляем...</div>`;
                 resultDiv.className = 'success';
-                document.getElementById('registerForm').reset(); // очистить форму
-                setTimeout(() => { window.location.href = '/api/v1/auth/login'; }, 2000);
+                document.getElementById('registerForm').reset();
+
+                // Редирект на ГЛАВНУЮ СТРАНИЦУ (не на API)
+                setTimeout(() => {
+                    window.location.href = '/'; // или '/login.html', если хотим показать форму входа
+                }, 1500);
+
             } else {
                 // Попробуем получить текст ошибки (может быть JSON с message)
                 let errorText = `❌ Ошибка ${response.status}`;

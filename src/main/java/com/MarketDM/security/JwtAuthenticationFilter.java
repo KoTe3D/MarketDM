@@ -3,7 +3,10 @@ package com.MarketDM.security;
 import com.MarketDM.config.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +23,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE + 1) //регистрирует порядок для Spring Security 7.0
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
@@ -56,6 +60,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // Устанавливаем аутентификацию в SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                System.out.println("🔍 После setAuthentication: auth=" + auth + ", isAuthenticated=" + (auth != null ? auth.isAuthenticated() : "null"));
 
                 log.debug("User {} authenticated successfully", username);
             }

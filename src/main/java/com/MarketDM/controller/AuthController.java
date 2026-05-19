@@ -26,10 +26,27 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserCreateDto createDto) {
-        UserResponseDto created = userService.create(createDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<JwtResponseDto> register(@Valid @RequestBody UserCreateDto createDto) {
+        // Создание пользователя
+        userService.create(createDto);
+
+        // Аутентификация
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        createDto.getEmail(),
+                        createDto.getPassword()
+                )
+        );
+
+        // Генерация JWT-токена
+        String jwt = tokenProvider.generateToken(authentication);
+
+        // Возвращаем токен
+        return ResponseEntity
+                .status(HttpStatus.CREATED) // 201 Created
+                .body(new JwtResponseDto(jwt));
     }
+
 
     // Эндпоинт для логина (получения JWT):
 
@@ -39,8 +56,13 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
+        // Аутентификация
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Генерация JWT-токена
         String jwt = tokenProvider.generateToken(authentication);
+
+        // Возвращаем токен
         return ResponseEntity.ok(new JwtResponseDto(jwt));
     }
 
