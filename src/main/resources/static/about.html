@@ -330,15 +330,75 @@
       margin-top: 2rem;
     }
 
-    .gallery-item {
+    .gallery-comic {
       text-align: center;
-      background: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
       padding: 1.5rem;
       transition: all 0.3s;
+
+      /* Добавляем картинку фоном */
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/comic.jpg'); /* картинка */
+      background-size: cover;       /* картинка заполнит блок, обрезая края */
+      background-position: center;  /* центрирование */
+      background-repeat: no-repeat;
     }
 
-    .gallery-item:hover {
+    .gallery-comic:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 205, 253, 0.3);
+    }
+
+    .gallery-manga {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/manga.jpg');
+      background-size: cover;
+      background-position: center, -1px -40px;
+      background-repeat: no-repeat;
+    }
+
+    .gallery-manga:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 205, 253, 0.3);
+    }
+
+    .gallery-animef {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/animef.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .gallery-animef:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 205, 253, 0.3);
+    }
+
+    .gallery-merch {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/merch.jpg ');
+      background-size: cover;
+      background-position: center, 0px -120px;
+      background-repeat: no-repeat;
+    }
+
+    .gallery-merch:hover {
       transform: translateY(-10px);
       box-shadow: 0 15px 30px rgba(0, 205, 253, 0.3);
     }
@@ -408,6 +468,9 @@
       background: rgba(255, 182, 193, 0.1);
       border-radius: 15px;
       border: 1px solid #ffb6c1;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      /* Цвет свечения по умолчанию */
+      --glow-color: #00cdfd;
     }
 
     .team-member img {
@@ -416,6 +479,8 @@
       border-radius: 50%;
       margin-bottom: 1rem;
       border: 3px solid #ffc638;
+      bject-fit: cover;
+      transition: all 0.3s ease; /* Плавность для увеличения и свечения */
     }
 
     .team-member h3 {
@@ -426,6 +491,23 @@
     .team-member p {
       color: #ffb6c1;
       font-size: 0.9rem;
+    }
+
+    /* Эффект при наведении */
+    .team-member:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(255, 198, 56, 0.15);
+    }
+
+    .team-member:hover img {
+      transform: scale(1.12);
+      border-color: var(--glow-color);
+
+      /* Свечение */
+      box-shadow:
+              0 0 12px var(--glow-color),
+              0 0 25px var(--glow-color),
+              0 0 40px rgba(255, 255, 255, 0.2);
     }
 
     /* Футер (такой же как на главной) */
@@ -681,6 +763,8 @@
         grid-template-columns: 1fr;
       }
     }
+
+
   </style>
 </head>
 <body>
@@ -729,25 +813,21 @@
   <div class="about-section">
     <h2>Что вы найдете у нас</h2>
     <div class="gallery-grid">
-      <div class="gallery-item">
-        <img src="/images/comics-icon.png" alt="Комиксы">
+      <div class="gallery-comic">
         <h3>Комиксы</h3>
         <p>Marvel, DC, Image, Dark Horse и независимые издательства</p>
       </div>
-      <div class="gallery-item">
-        <img src="/images/manga-icon.png" alt="Манга">
+      <div class="gallery-manga">
         <h3>Манга</h3>
         <p>Классика и новинки от Shueisha, Kodansha, Shogakukan</p>
       </div>
-      <div class="gallery-item">
-        <img src="/images/figure-icon.png" alt="Фигурки">
+      <div class="gallery-animef">
         <h3>Аниме-фигурки</h3>
         <p>Nendoroid, Figma, Scale Figures и эксклюзивы</p>
       </div>
-      <div class="gallery-item">
-        <img src="/images/merch-icon.png" alt="Мерч">
+      <div class="gallery-merch">
         <h3>Мерч и коллекционки</h3>
-        <p>Постеры, постеры, аксессуары и лимитированные издания</p>
+        <p>Постеры, футболки, аксессуары и лимитированные издания</p>
       </div>
     </div>
   </div>
@@ -782,26 +862,30 @@
   <!-- Наша команда -->
   <div class="about-section">
     <h2>Наша команда</h2>
-    <p>Мы - такие же фанаты, как и вы. Днём мы упаковываем заказы, а ночью читаем новые выпуски и смотрим шикимори. Каждый член команды - эксперт в своём направлении, поэтому мы всегда подскажем, какую фигурку лучше взять или с чего начать чтение манги.</p>
+    <p>Мы - такие же фанаты, как и вы. Днём мы упаковываем заказы, а ночью читаем мангу и смотрим аниме. Каждый член команды - эксперт в своём направлении, поэтому мы всегда готовы ответить на интересующие вас вопросы.</p>
     <div class="team-grid">
-      <div class="team-member">
-        <img src="/images/team1.jpg" alt="Данила">
+      <div class="team-member team-tanjiro">
         <h3>Данила</h3>
         <p>Основатель, главный программист и любитель Аниме</p>
       </div>
-      <div class="team-member">
-        <img src="/images/team2.jpg" alt="Кирилл">
+      <div class="team-member team-sanemi">
         <h3>Кирилл</h3>
         <p>Эксперт по манге и японской культуре</p>
       </div>
-      <div class="team-member">
-        <img src="/images/team3.jpg" alt="Дмитрий">
+      <div class="team-member team-akaza">
         <h3>Дмитрий</h3>
         <p>Гуру по фигуркам и редким коллекциям</p>
       </div>
-      <div class="team-member">
-        <img src="/images/team4.jpg" alt="Лера">
+      <div class="team-member team-kocho">
         <h3>Лера</h3>
+        <p>CMM <br> Поддержка клиентов и комьюнити-менеджер</p>
+      </div>
+      <div class="team-member team-Dzenitsu">
+        <h3>Илай</h3>
+        <p>CMM <br> Поддержка клиентов и комьюнити-менеджер</p>
+      </div>
+      <div class="team-member team-rengoku">
+        <h3>Никита</h3>
         <p>Поддержка клиентов и комьюнити-менеджер</p>
       </div>
     </div>
@@ -810,7 +894,7 @@
   <!-- Контакты -->
   <div class="about-section">
     <h2>Свяжитесь с нами</h2>
-    <p>Мы всегда на связи и готовы ответить на любые вопросы о комиксах, фигурках или заказах.</p>
+    <p>Мы всегда на связи и готовы ответить на любые вопросы о наших товарах или заказах.</p>
     <p style="margin-top: 1rem;">Мы в соцсетях: делимся новостями, анонсами и эксклюзивными предложениями!</p>
     <p>+7 (***) ***-**-** (ежедневно с 10:00 до 21:00)</p>
     <p style="margin-top: 1rem;"><a href="mailto:MarketDM@mail.ru" style="color: #ffc638;">MarketDM@mail.ru</a></p>
