@@ -142,7 +142,7 @@ public class SecurityConfig {
                             .contentSecurityPolicy(csp -> csp.policyDirectives(
                                     "default-src 'self'; " +
                                             "img-src 'self' data: https:; " +  // Разрешить картинки с вашего домена + data: (для base64)
-                                            "script-src 'self' 'unsafe-inline' https://api-maps.yandex.ru; " +  // Для инлайн-стилей
+                                            "script-src 'self' https://api-maps.yandex.ru; " +  // Для инлайн-стилей
                                             "style-src 'self' 'unsafe-inline'; " +
                                             "connect-src 'self' https://api-maps.yandex.ru; " +
                                             "script-src 'self'"  // Запретить внешние скрипты
