@@ -153,6 +153,7 @@ public class SecurityConfig {
                                     .includeSubDomains(true)
                             )
                     )
+
                     .authorizeHttpRequests(auth -> auth
                             // Публичные страницы
                             .requestMatchers(
