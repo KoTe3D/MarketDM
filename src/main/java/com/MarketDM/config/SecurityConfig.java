@@ -52,7 +52,7 @@ public class SecurityConfig {
         }
 
         /*
-         API для мобильных приложений и SPA (React/Vue) – STATELESS, JWT
+         API для мобильных приложений и SPA (React/Vue)- STATELESS, JWT
          */
         @Bean
         @Order(1)
