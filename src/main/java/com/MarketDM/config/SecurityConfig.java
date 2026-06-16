@@ -141,11 +141,12 @@ public class SecurityConfig {
                             // Политика безопасности контента: разрешить загрузку ресурсов только с вашего домена
                             .contentSecurityPolicy(csp -> csp.policyDirectives(
                                     "default-src 'self'; " +
-                                            "img-src 'self' data: https:; " +  // Разрешить картинки с вашего домена + data: (для base64)
-                                            "script-src 'self' https://api-maps.yandex.ru; " +  // Для инлайн-стилей
-                                            "style-src 'self' 'unsafe-inline'; " +
-                                            "connect-src 'self' https://api-maps.yandex.ru; " +
-                                            "script-src 'self'"  // Запретить внешние скрипты
+                                    "img-src 'self' data: https:; " +
+                                    "script-src 'self' https://api-maps.yandex.ru https://yastatic.net 'unsafe-inline'; " +
+                                    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+                                    "connect-src 'self' https://api-maps.yandex.ru https://yastatic.net; " +
+                                    "font-src 'self' https://fonts.gstatic.com; " +
+                                    "frame-src 'self' https://www.youtube.com;"
                             ))
                             // HSTS: принудительный HTTPS (в проде)
                             .httpStrictTransportSecurity(hsts -> hsts
