@@ -1,7 +1,6 @@
 package com.MarketDM.controller;
 
 import com.MarketDM.DTO.UserCreateDto;
-import com.MarketDM.DTO.UserResponseDto;
 import com.MarketDM.service.UserService;
 import com.MarketDM.DTO.LoginRequestDto;
 import com.MarketDM.DTO.JwtResponseDto;
