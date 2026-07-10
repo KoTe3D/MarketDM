@@ -47,7 +47,7 @@ public class AuthController {
     }
 
 
-    // Эндпоинт для логина (получения JWT):
+    // Эндпоинт для логина (получения  JWT):
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
